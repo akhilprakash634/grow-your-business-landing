@@ -146,7 +146,7 @@ export default function Contact() {
             {/* Quick Contact Cards */}
             <div className="space-y-3 sm:space-y-4">
               <a
-                href="https://wa.me/YOURNUMBER"
+                href="https://wa.me/8282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center space-x-3 sm:space-x-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl sm:rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
@@ -162,7 +162,7 @@ export default function Contact() {
               </a>
 
               <a
-                href="tel:+91YOURNUMBER"
+                href="tel:+918282863459"
                 className="group flex items-center space-x-3 sm:space-x-4 p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
@@ -170,7 +170,7 @@ export default function Contact() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-white font-semibold text-sm sm:text-base mb-0.5 sm:mb-1">Call Now</h3>
-                  <p className="text-white/90 text-xs sm:text-sm">+91 YOURNUMBER</p>
+                  <p className="text-white/90 text-xs sm:text-sm">+91 8282863459</p>
                 </div>
                 <i className="ri-arrow-right-line text-white text-xl sm:text-2xl group-hover:translate-x-2 transition-transform"></i>
               </a>
