@@ -65,7 +65,7 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <a
-              href="https://wa.me/YOURNUMBER"
+              href="https://wa.me/8282863459"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all hover:shadow-lg flex items-center space-x-1.5 whitespace-nowrap"
@@ -74,7 +74,7 @@ export default function Header() {
               <span>WhatsApp Now</span>
             </a>
             <a
-              href="tel:+91YOURNUMBER"
+              href="tel:+918282863459"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center space-x-1.5 whitespace-nowrap ${
                 isScrolled 
                   ? 'bg-gray-900 text-white hover:bg-gray-800' 
@@ -123,7 +123,7 @@ export default function Header() {
             </nav>
             <div className="flex flex-col space-y-2 mt-3 sm:mt-4 px-4">
               <a
-                href="https://wa.me/YOURNUMBER"
+                href="https://wa.me/8282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all flex items-center justify-center space-x-2 whitespace-nowrap"
@@ -132,7 +132,7 @@ export default function Header() {
                 <span>WhatsApp Now</span>
               </a>
               <a
-                href="tel:+91YOURNUMBER"
+                href="tel:+918282863459"
                 className="px-4 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center space-x-2 whitespace-nowrap"
               >
                 <i className="ri-phone-line text-base"></i>

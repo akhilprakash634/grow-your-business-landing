@@ -102,7 +102,7 @@ export default function FAQ() {
         <div className="mt-10 sm:mt-16 text-center">
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Still have questions?</p>
           <a
-            href="https://wa.me/YOURNUMBER"
+            href="https://wa.me/8282863459"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 whitespace-nowrap"

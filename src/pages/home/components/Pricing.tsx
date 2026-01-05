@@ -116,7 +116,7 @@ export default function Pricing() {
 
               {/* CTA Button */}
               <a
-                href="https://wa.me/YOURNUMBER"
+                href="https://wa.me/8282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`block w-full py-3 sm:py-4 text-center text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl transition-all duration-300 whitespace-nowrap ${

@@ -105,7 +105,7 @@ export default function Footer() {
             </h4>
             <div className="space-y-3 sm:space-y-4">
               <a
-                href="https://wa.me/YOURNUMBER"
+                href="https://wa.me/8282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group"
@@ -116,13 +116,13 @@ export default function Footer() {
                 <span>WhatsApp</span>
               </a>
               <a
-                href="tel:+91YOURNUMBER"
+                href="tel:+918282863459"
                 className="flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group"
               >
                 <div className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-blue-500/20 rounded-lg group-hover:bg-blue-500 transition-all">
                   <i className="ri-phone-line text-base sm:text-lg text-blue-400 group-hover:text-white"></i>
                 </div>
-                <span>+91 YOURNUMBER</span>
+                <span>+91 8282863459</span>
               </a>
             </div>
           </div>
