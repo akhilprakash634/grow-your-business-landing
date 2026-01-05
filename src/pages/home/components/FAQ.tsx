@@ -1,4 +1,6 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { generateFAQSchema } from '../../../utils/seo';
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -25,6 +27,23 @@ export default function FAQ() {
       answer: 'Simply message us on WhatsApp! Share your business details, and we\'ll guide you through the entire process from start to finish.'
     }
   ];
+
+  useEffect(() => {
+    // Add FAQ Schema
+    const schema = generateFAQSchema(faqs);
+    const scriptTag = document.createElement('script');
+    scriptTag.setAttribute('type', 'application/ld+json');
+    scriptTag.setAttribute('data-faq-schema', 'true');
+    scriptTag.textContent = JSON.stringify(schema);
+    document.head.appendChild(scriptTag);
+
+    return () => {
+      const existingScript = document.querySelector('script[data-faq-schema="true"]');
+      if (existingScript && existingScript.parentNode) {
+        existingScript.parentNode.removeChild(existingScript);
+      }
+    };
+  }, []);
 
   return (
     <section id="faq" className="py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
@@ -102,7 +121,7 @@ export default function FAQ() {
         <div className="mt-10 sm:mt-16 text-center">
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Still have questions?</p>
           <a
-            href="https://wa.me/6282863459"
+            href="https://wa.me/YOURNUMBER"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 whitespace-nowrap"

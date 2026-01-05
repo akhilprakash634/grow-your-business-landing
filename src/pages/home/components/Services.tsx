@@ -81,7 +81,7 @@ export default function Services() {
 
                 {/* CTA */}
                 <a
-                  href="https://wa.me/6282863459"
+                  href="https://wa.me/YOURNUMBER"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`inline-flex items-center space-x-1.5 sm:space-x-2 text-xs sm:text-sm font-semibold bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent group-hover:translate-x-2 transition-transform duration-300 cursor-pointer`}
@@ -101,7 +101,7 @@ export default function Services() {
         <div className="text-center mt-10 sm:mt-16">
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Need a custom solution for your business?</p>
           <a
-            href="https://wa.me/6282863459"
+            href="https://wa.me/YOURNUMBER"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-emerald-600 text-white text-sm sm:text-base font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 whitespace-nowrap"

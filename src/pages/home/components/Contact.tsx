@@ -146,7 +146,7 @@ export default function Contact() {
             {/* Quick Contact Cards */}
             <div className="space-y-3 sm:space-y-4">
               <a
-                href="https://wa.me/6282863459"
+                href="https://wa.me/916282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center space-x-3 sm:space-x-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl sm:rounded-2xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"

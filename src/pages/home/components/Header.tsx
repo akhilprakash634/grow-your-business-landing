@@ -23,19 +23,20 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg border-b border-gray-100' : 'bg-transparent'
+        isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+      <nav className="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4" aria-label="Main navigation">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center cursor-pointer group" onClick={() => scrollToSection('hero')}>
+          <a href="/" className="group flex items-center space-x-2 sm:space-x-3" aria-label="Grow Your Business - Home">
+            <h1 className="sr-only">Grow Your Business</h1>
             <img 
               src="https://static.readdy.ai/image/3a79f3d26d575281f009959c52307d03/4faeac9cacf9a888180dbe48ffa35e91.png" 
               alt="Grow Your Business Logo" 
               className="h-8 sm:h-10 w-auto rounded-lg group-hover:scale-105 transition-transform"
             />
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
@@ -65,7 +66,7 @@ export default function Header() {
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <a
-              href="https://wa.me/6282863459"
+              href="https://wa.me/916282863459"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all hover:shadow-lg flex items-center space-x-1.5 whitespace-nowrap"
@@ -123,7 +124,7 @@ export default function Header() {
             </nav>
             <div className="flex flex-col space-y-2 mt-3 sm:mt-4 px-4">
               <a
-                href="https://wa.me/6282863459"
+                href="https://wa.me/916282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all flex items-center justify-center space-x-2 whitespace-nowrap"
@@ -141,7 +142,7 @@ export default function Header() {
             </div>
           </div>
         )}
-      </div>
+      </nav>
     </header>
   );
 }
