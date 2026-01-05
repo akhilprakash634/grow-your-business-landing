@@ -105,7 +105,7 @@ export default function Footer() {
             </h4>
             <div className="space-y-3 sm:space-y-4">
               <a
-                href="https://wa.me/6282863459"
+                href="https://wa.me/916282863459"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 sm:space-x-3 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group"
