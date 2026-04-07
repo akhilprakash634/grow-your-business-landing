@@ -1,12 +1,11 @@
-
 import { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import Problem from './components/Problem';
 import Services from './components/Services';
-import HowItWorks from './components/HowItWorks';
 import Pricing from './components/Pricing';
-import About from './components/About';
-import FAQ from './components/FAQ';
+import SocialProof from './components/SocialProof';
+import HowItWorks from './components/HowItWorks';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { useSEO, generateLocalBusinessSchema, generateServiceSchema } from '../../utils/seo';
@@ -41,15 +40,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-950 text-gray-50 flex flex-col font-sans">
       <Header />
-      <main>
+      <main className="flex-1">
         <Hero />
+        <Problem />
         <Services />
-        <HowItWorks />
         <Pricing />
-        <About />
-        <FAQ />
+        <SocialProof />
+        <HowItWorks />
         <Contact />
       </main>
       <Footer />
