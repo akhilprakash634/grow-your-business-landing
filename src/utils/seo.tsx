@@ -7,7 +7,7 @@ interface SEOProps {
   canonical?: string;
   ogType?: string;
   ogImage?: string;
-  schema?: object;
+  schema?: object | object[];
 }
 
 export function useSEO({
@@ -20,7 +20,7 @@ export function useSEO({
   schema
 }: SEOProps) {
   useEffect(() => {
-    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://example.com';
+    const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
     
     // Update title
     if (title) {
@@ -83,11 +83,12 @@ export function useSEO({
 
     // Add or update Schema.org JSON-LD
     if (schema) {
-      let scriptTag = document.querySelector('script[type="application/ld+json"]');
+      let scriptTag = document.querySelector('script[type="application/ld+json"]#seo-schema');
       
       if (!scriptTag) {
         scriptTag = document.createElement('script');
         scriptTag.setAttribute('type', 'application/ld+json');
+        scriptTag.setAttribute('id', 'seo-schema');
         document.head.appendChild(scriptTag);
       }
       
@@ -100,8 +101,35 @@ export function useSEO({
   }, [title, description, keywords, canonical, ogType, ogImage, schema]);
 }
 
+export function generateOrganizationSchema() {
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: 'Grow Your Business',
+    url: siteUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://static.readdy.ai/image/3a79f3d26d575281f009959c52307d03/4faeac9cacf9a888180dbe48ffa35e91.png',
+      width: '512',
+      height: '512'
+    },
+    sameAs: [
+      'https://wa.me/916282863459'
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+91-6282863459',
+      contactType: 'customer service',
+      areaServed: ['IN', 'AE'],
+      availableLanguage: ['English', 'Malayalam']
+    }
+  };
+}
+
 export function generateWebPageSchema(url: string, name: string, description: string) {
-  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://example.com';
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
   
   return {
     '@context': 'https://schema.org',
@@ -149,10 +177,10 @@ export function generateLocalBusinessSchema() {
       latitude: 10.8505,
       longitude: 76.2711
     },
-    areaServed: {
-      '@type': 'State',
-      name: 'Kerala'
-    },
+    areaServed: [
+      { '@type': 'State', name: 'Kerala' },
+      { '@type': 'Country', name: 'United Arab Emirates' }
+    ],
     sameAs: [
       'https://wa.me/916282863459'
     ]
@@ -160,7 +188,7 @@ export function generateLocalBusinessSchema() {
 }
 
 export function generateServiceSchema() {
-  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://example.com';
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
   
   return {
     '@context': 'https://schema.org',
@@ -172,10 +200,10 @@ export function generateServiceSchema() {
       name: 'Grow Your Business',
       url: siteUrl
     },
-    areaServed: {
-      '@type': 'State',
-      name: 'Kerala'
-    },
+    areaServed: [
+      { '@type': 'State', name: 'Kerala' },
+      { '@type': 'Country', name: 'United Arab Emirates' }
+    ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Digital Business Services',
@@ -225,7 +253,7 @@ export function generateFAQSchema(faqs: Array<{ question: string; answer: string
 }
 
 export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
-  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://example.com';
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
   
   return {
     '@context': 'https://schema.org',

@@ -25,9 +25,9 @@ export default function Hero() {
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.1] px-2 tracking-tight">
-          Get 20+ Customer Enquiries in 
+          Expert IT Services & 
           <span className="block mt-2 text-emerald-400">
-            7 Days for Your Business
+            Digital Growth in Kerala & UAE
           </span>
         </h1>
         

@@ -1,4 +1,20 @@
+# robots.txt for growyourbusiness.today
 User-agent: *
 Allow: /
+Disallow: /private/
+Disallow: /admin/
 
-Sitemap: https://example.com/sitemap.xml
+# AI Bot specific rules (Optional but recommended for AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://growyourbusiness.today/sitemap.xml
