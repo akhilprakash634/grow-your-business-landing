@@ -1,0 +1,34 @@
+# SEO-Friendly .htaccess for Vite SPAs
+# Fixes 403 Forbidden and allows crawlers
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Allow common bots explicitly if server has rigid User-Agent blocking
+  # Set Env variable if bot is detected
+  SetEnvIfNoCase User-Agent "Googlebot" is_bot
+  SetEnvIfNoCase User-Agent "Bingbot" is_bot
+  SetEnvIfNoCase User-Agent "GPTBot" is_bot
+  SetEnvIfNoCase User-Agent "ClaudeBot" is_bot
+  SetEnvIfNoCase User-Agent "PerplexityBot" is_bot
+  SetEnvIfNoCase User-Agent "Applebot" is_bot
+
+  # Optional: If you want to log bot visits
+  # CustomLog logs/bot_access.log common env=is_bot
+
+  # Ensure index.html is accessible
+  RewriteRule ^index\.html$ - [L]
+  
+  # If the requested resource is not a file or directory, redirect to index.html
+  # This is crucial for React Router SPA routes to work without 404
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Security headers to ensure bots can crawl without SSL issues
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
