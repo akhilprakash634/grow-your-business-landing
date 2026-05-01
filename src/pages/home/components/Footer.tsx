@@ -7,12 +7,12 @@ export default function Footer() {
     company: [
       { name: 'About Us', path: '/about' },
       { name: 'Contact', path: '/contact' },
-      { name: 'Blog', path: '/blog' },
+      { name: 'Blog', path: '/resources' },
       { name: 'Growth System', path: '/#solution' },
     ],
     services: [
-      { name: 'Website Development', path: '/website-dev' },
-      { name: 'IT Support', path: '/it-support' },
+      { name: 'Website Development', path: '/services/website-development' },
+      { name: 'IT Support', path: '/services/it-support' },
       { name: 'WhatsApp Marketing', path: '/services' },
       { name: 'Local SEO / GMB', path: '/services' },
     ],
