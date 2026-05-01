@@ -14,18 +14,6 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    if (location.pathname !== '/') {
-      window.location.href = `/#${id}`;
-      return;
-    }
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    }
-  };
-
   const navLinks = [
     { name: 'Services', path: '/services' },
     { name: 'About', path: '/about' },
@@ -40,27 +28,36 @@ export default function Header() {
         isScrolled ? 'bg-gray-950/95 backdrop-blur-md shadow-lg border-b border-gray-800' : 'bg-transparent'
       }`}
     >
-      <nav className="w-full px-4 sm:px-6 lg:px-8 py-4" aria-label="Main navigation">
+      <nav 
+        className={`w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
+          isScrolled ? 'py-2' : 'py-3 sm:py-4'
+        }`} 
+        aria-label="Main navigation"
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="group flex items-center space-x-3" aria-label="Grow Your Business - Home">
             <img 
               src="/logo.png" 
               alt="Grow Your Business Logo" 
-              width="200"
-              height="80"
-              className="h-16 sm:h-20 w-auto object-contain transition-transform group-hover:scale-105" 
+              width="160"
+              height="50"
+              className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
+                isScrolled ? 'h-8 sm:h-10' : 'h-10 sm:h-12'
+              }`} 
               loading="eager"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6">
+          <nav className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-emerald-400 ${isScrolled ? 'text-gray-300' : 'text-gray-100'}`}
+                className={`text-sm font-semibold transition-colors hover:text-emerald-400 ${
+                  isScrolled || location.pathname !== '/' ? 'text-gray-300' : 'text-gray-100'
+                }`}
               >
                 {link.name}
               </Link>
@@ -73,7 +70,9 @@ export default function Header() {
               href="https://wa.me/916282863459"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center space-x-2"
+              className={`px-5 py-2 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center space-x-2 ${
+                isScrolled ? 'scale-90' : 'scale-100'
+              }`}
             >
               <i className="ri-whatsapp-fill text-lg"></i>
               <span>Free Consultation</span>
