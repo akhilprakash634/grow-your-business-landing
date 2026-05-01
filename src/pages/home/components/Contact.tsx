@@ -170,10 +170,10 @@ export default function Contact() {
                   className="w-full bg-gray-950 border border-gray-800 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-emerald-500 transition-colors appearance-none"
                 >
                   <option value="" disabled selected>Select a Service</option>
-                  <option value="website">New Website Development</option>
-                  <option value="whatsapp">WhatsApp Marketing System</option>
-                  <option value="seo">Local SEO & GMB Optimization</option>
-                  <option value="full">Full Business Growth Package</option>
+                  <option value="New Website Development">New Website Development</option>
+                  <option value="WhatsApp Marketing System">WhatsApp Marketing System</option>
+                  <option value="Local SEO & GMB Optimization">Local SEO & GMB Optimization</option>
+                  <option value="Full Business Growth Package">Full Business Growth Package</option>
                 </select>
               </div>
 
