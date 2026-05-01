@@ -1,12 +1,12 @@
-import Header from '../home/components/Header';
-import Footer from '../home/components/Footer';
-import { useSEO } from '../../utils/seo';
+import Header from '../../home/components/Header';
+import Footer from '../../home/components/Footer';
+import { useSEO } from '../../../utils/seo';
 
 export default function WebsiteDevPage() {
   useSEO({
     title: 'Professional Website Development Kerala & UAE | High Converting Designs',
     description: 'Get a mobile-friendly, fast-loading website for your business. Specializing in local business growth in Kerala and UAE.',
-    canonical: '/website-dev',
+    canonical: '/services/website-development',
   });
 
   return (

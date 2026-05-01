@@ -8,38 +8,38 @@ export default function BlogPage() {
       title: "How AI is Revolutionizing Local Business in Kerala and UAE",
       excerpt: "Discover how smart automation and AI-driven SEO can help your business stay ahead of the competition in 2025.",
       date: "May 1, 2026",
-      slug: "ai-growth-kerala"
+      slug: "ai-business-growth-kerala"
     },
     {
       title: "5 Tips for Optimizing Your Google Business Profile",
       excerpt: "Learn the secrets to ranking #1 on Google Maps in your local area and getting more customer calls.",
       date: "April 25, 2026",
-      slug: "gmb-optimization"
+      slug: "google-business-profile-tips"
     },
     {
       title: "The Ultimate Guide to WhatsApp Marketing for UAE Businesses",
       excerpt: "Why WhatsApp is the #1 conversion tool for businesses in Dubai and Abu Dhabi, and how to set it up.",
       date: "April 15, 2026",
-      slug: "whatsapp-marketing-uae"
+      slug: "whatsapp-marketing-guide-uae"
     },
     {
       title: "Why Your Kerala Business Needs a Fast Website in 2025",
       excerpt: "Speed is a ranking factor. See how a fast website improves your SEO and customer trust in Kerala.",
       date: "April 10, 2026",
-      slug: "fast-website-kerala"
+      slug: "fast-website-benefits-kerala"
     },
     {
       title: "Choosing the Right IT Partner in the Middle East",
       excerpt: "Key factors to consider when hiring an IT agency for your business expansion in the Middle East.",
       date: "April 5, 2026",
-      slug: "choosing-it-partner"
+      slug: "choosing-right-it-partner"
     }
   ];
 
   useSEO({
     title: 'Business Growth Blog | IT & Digital Marketing Insights',
     description: 'Expert advice on website design, SEO, and business automation for entrepreneurs in Kerala and UAE.',
-    canonical: '/blog',
+    canonical: '/resources',
   });
 
   return (
@@ -54,10 +54,10 @@ export default function BlogPage() {
               <div key={i} className="group p-8 bg-gray-900 rounded-3xl border border-gray-800 hover:border-emerald-500/30 transition-all">
                 <span className="text-emerald-400 text-sm font-semibold uppercase tracking-wider">{post.date}</span>
                 <h2 className="text-2xl font-bold mt-4 mb-4 text-white group-hover:text-emerald-400 transition-colors">
-                  <a href={`/blog/${post.slug}`}>{post.title}</a>
+                  <a href={`/resources/${post.slug}`}>{post.title}</a>
                 </h2>
                 <p className="text-gray-400 text-lg mb-6 leading-relaxed">{post.excerpt}</p>
-                <a href={`/blog/${post.slug}`} className="inline-flex items-center text-emerald-400 font-bold hover:translate-x-2 transition-transform">
+                <a href={`/resources/${post.slug}`} className="inline-flex items-center text-emerald-400 font-bold hover:translate-x-2 transition-transform">
                   Read Full Article <i className="ri-arrow-right-line ml-2"></i>
                 </a>
               </div>

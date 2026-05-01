@@ -2,12 +2,16 @@ import type { RouteObject } from "react-router-dom";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/home/page";
 import ServicesPage from "../pages/services/page";
-import ITSupportPage from "../pages/it-support/page";
-import WebsiteDevPage from "../pages/website-dev/page";
+import ITSupportPage from "../pages/services/it-support/page";
+import WebsiteDevPage from "../pages/services/website-dev/page";
 import AboutPage from "../pages/about/page";
 import ContactPage from "../pages/contact/page";
-import BlogPage from "../pages/blog/page";
-import AIGrowthKerala from "../pages/blog/ai-growth-kerala";
+import BlogPage from "../pages/resources/page";
+import AIGrowthKerala from "../pages/resources/ai-growth-kerala";
+import GMBOptimization from "../pages/resources/gmb-optimization";
+import WhatsAppMarketingUAE from "../pages/resources/whatsapp-marketing-uae";
+import FastWebsiteKerala from "../pages/resources/fast-website-kerala";
+import ChoosingITPartner from "../pages/resources/choosing-it-partner";
 
 const routes: RouteObject[] = [
   {
@@ -19,11 +23,11 @@ const routes: RouteObject[] = [
     element: <ServicesPage />,
   },
   {
-    path: "/it-support",
+    path: "/services/it-support",
     element: <ITSupportPage />,
   },
   {
-    path: "/website-dev",
+    path: "/services/website-development",
     element: <WebsiteDevPage />,
   },
   {
@@ -35,12 +39,28 @@ const routes: RouteObject[] = [
     element: <ContactPage />,
   },
   {
-    path: "/blog",
+    path: "/resources",
     element: <BlogPage />,
   },
   {
-    path: "/blog/ai-growth-kerala",
+    path: "/resources/ai-business-growth-kerala",
     element: <AIGrowthKerala />,
+  },
+  {
+    path: "/resources/google-business-profile-tips",
+    element: <GMBOptimization />,
+  },
+  {
+    path: "/resources/whatsapp-marketing-guide-uae",
+    element: <WhatsAppMarketingUAE />,
+  },
+  {
+    path: "/resources/fast-website-benefits-kerala",
+    element: <FastWebsiteKerala />,
+  },
+  {
+    path: "/resources/choosing-right-it-partner",
+    element: <ChoosingITPartner />,
   },
   {
     path: "*",

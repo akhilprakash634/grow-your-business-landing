@@ -1,6 +1,6 @@
-import Header from '../home/components/Header';
-import Footer from '../home/components/Footer';
-import { useSEO, generateFAQSchema } from '../../utils/seo';
+import Header from '../../home/components/Header';
+import Footer from '../../home/components/Footer';
+import { useSEO, generateFAQSchema } from '../../../utils/seo';
 
 export default function ITSupportPage() {
   const faqs = [
@@ -11,7 +11,7 @@ export default function ITSupportPage() {
   useSEO({
     title: 'Business Support & WhatsApp Systems Kerala | UAE',
     description: 'Expert IT support and WhatsApp marketing automation for businesses. Streamline your customer communication today.',
-    canonical: '/it-support',
+    canonical: '/services/it-support',
   });
 
   return (

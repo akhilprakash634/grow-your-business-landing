@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Services() {
   return (
     <section id="solution" className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-950">
@@ -43,10 +45,13 @@ export default function Services() {
                 </li>
               </ul>
             </div>
-            <div className="mt-auto bg-gray-950/50 p-6 border-t border-gray-800 flex items-center space-x-3">
-              <i className="ri-arrow-right-line text-emerald-500"></i>
-              <span className="text-white font-medium text-sm">Turn visitors into real customers</span>
-            </div>
+            <Link to="/services/it-support" className="mt-auto bg-gray-950/50 p-6 border-t border-gray-800 flex items-center justify-between group/link">
+              <div className="flex items-center space-x-3">
+                <i className="ri-arrow-right-line text-emerald-500"></i>
+                <span className="text-white font-medium text-sm">Turn visitors into real customers</span>
+              </div>
+              <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider group-hover/link:translate-x-1 transition-transform">Learn More</span>
+            </Link>
           </div>
 
           {/* Service 2 */}
@@ -76,10 +81,13 @@ export default function Services() {
                 </li>
               </ul>
             </div>
-            <div className="mt-auto bg-gray-950/50 p-6 border-t border-gray-800 flex items-center space-x-3">
-              <i className="ri-arrow-right-line text-emerald-500"></i>
-              <span className="text-white font-medium text-sm">Make your existing website actually work</span>
-            </div>
+            <Link to="/services/website-development" className="mt-auto bg-gray-950/50 p-6 border-t border-gray-800 flex items-center justify-between group/link">
+              <div className="flex items-center space-x-3">
+                <i className="ri-arrow-right-line text-emerald-500"></i>
+                <span className="text-white font-medium text-sm">Make your existing website actually work</span>
+              </div>
+              <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider group-hover/link:translate-x-1 transition-transform">Learn More</span>
+            </Link>
           </div>
 
           {/* Service 3 */}

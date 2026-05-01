@@ -5,6 +5,12 @@
   RewriteEngine On
   RewriteBase /
   
+  # 301 Redirects for SEO Restructuring
+  Redirect 301 /it-support /services/it-support
+  Redirect 301 /website-dev /services/website-development
+  Redirect 301 /blog /resources
+  Redirect 301 /blog/ai-growth-kerala /resources/ai-business-growth-kerala
+  
   # Allow common bots explicitly if server has rigid User-Agent blocking
   # Set Env variable if bot is detected
   SetEnvIfNoCase User-Agent "Googlebot" is_bot

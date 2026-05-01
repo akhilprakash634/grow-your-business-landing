@@ -17,7 +17,7 @@ export default function AIGrowthKerala() {
   useSEO({
     title: 'How AI is Changing Business Growth in Kerala & UAE | 2025 Guide',
     description: 'Discover how AI and Answer Engine Optimization (AEO) are helping local businesses in Kerala and UAE scale faster than ever before.',
-    canonical: '/blog/ai-growth-kerala',
+    canonical: '/resources/ai-business-growth-kerala',
     schema: generateFAQSchema(faqs)
   });
 
