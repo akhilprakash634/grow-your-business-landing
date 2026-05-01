@@ -15,6 +15,24 @@ export default function BlogPage() {
       excerpt: "Learn the secrets to ranking #1 on Google Maps in your local area and getting more customer calls.",
       date: "April 25, 2026",
       slug: "gmb-optimization"
+    },
+    {
+      title: "The Ultimate Guide to WhatsApp Marketing for UAE Businesses",
+      excerpt: "Why WhatsApp is the #1 conversion tool for businesses in Dubai and Abu Dhabi, and how to set it up.",
+      date: "April 15, 2026",
+      slug: "whatsapp-marketing-uae"
+    },
+    {
+      title: "Why Your Kerala Business Needs a Fast Website in 2025",
+      excerpt: "Speed is a ranking factor. See how a fast website improves your SEO and customer trust in Kerala.",
+      date: "April 10, 2026",
+      slug: "fast-website-kerala"
+    },
+    {
+      title: "Choosing the Right IT Partner in the Middle East",
+      excerpt: "Key factors to consider when hiring an IT agency for your business expansion in the Middle East.",
+      date: "April 5, 2026",
+      slug: "choosing-it-partner"
     }
   ];
 

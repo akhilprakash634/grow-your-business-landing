@@ -56,6 +56,18 @@ export default function AIGrowthKerala() {
               </ul>
             </div>
 
+            <h2 className="text-3xl font-bold text-white mt-12 mb-4">Voice Search Optimization</h2>
+            <p>
+              With more users in the UAE and Kerala using voice assistants like Siri, Alexa, and Google Assistant, your content needs to answer natural language questions. Instead of "web design Kerala," optimize for "Who is the best web designer in Kerala for small businesses?"
+            </p>
+
+            <div className="bg-gray-900 border-l-4 border-emerald-500 p-6 my-8">
+              <h4 className="text-xl font-bold text-white mb-2">Voice Search Tip:</h4>
+              <p className="text-gray-400">
+                Use long-tail keywords that sound like a conversation. Focus on local landmarks and colloquial terms used in Kerala or Dubai to increase your local voice search relevance.
+              </p>
+            </div>
+
             <h2 className="text-3xl font-bold text-white mt-12 mb-4">3 Steps to AI-Ready Your Business</h2>
             <ol className="list-decimal pl-6 space-y-4">
               <li>
