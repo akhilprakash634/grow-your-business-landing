@@ -11,7 +11,7 @@ export default function FirstClientPage() {
   useEffect(() => {
     const fetchSalesCount = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales-count`);
+        const response = await fetch('/api/sales-count');
         if (response.ok) {
           const data = await response.json();
           setSalesCount(data.count);
