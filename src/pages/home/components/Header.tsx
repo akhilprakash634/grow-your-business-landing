@@ -19,8 +19,24 @@ export default function Header() {
     { name: 'About', path: '/about' },
     { name: 'IT Support', path: '/services/it-support' },
     { name: 'Website Dev', path: '/services/website-development' },
+    { name: 'Digital Store', path: '/#products' },
     { name: 'Contact', path: '/contact' },
   ];
+
+  const handleNavClick = (path: string) => {
+    setIsMobileMenuOpen(false);
+    if (path.startsWith('/#')) {
+      const id = path.substring(2);
+      if (location.pathname === '/') {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.location.href = `/${path.substring(1)}`;
+      }
+    }
+  };
 
   return (
     <header
@@ -52,15 +68,27 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-sm font-semibold transition-colors hover:text-emerald-400 ${
-                  isScrolled || location.pathname !== '/' ? 'text-gray-300' : 'text-gray-100'
-                }`}
-              >
-                {link.name}
-              </Link>
+              link.path.startsWith('/#') ? (
+                <button
+                  key={link.name}
+                  onClick={() => handleNavClick(link.path)}
+                  className={`text-sm font-semibold transition-colors hover:text-emerald-400 ${
+                    isScrolled || location.pathname !== '/' ? 'text-gray-300' : 'text-gray-100'
+                  }`}
+                >
+                  {link.name}
+                </button>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`text-sm font-semibold transition-colors hover:text-emerald-400 ${
+                    isScrolled || location.pathname !== '/' ? 'text-gray-300' : 'text-gray-100'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
           </nav>
 
@@ -93,14 +121,24 @@ export default function Header() {
           <div className="lg:hidden absolute top-full left-0 right-0 bg-gray-950 border-b border-gray-800 py-4 px-4 shadow-xl">
             <nav className="flex flex-col space-y-2">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-left px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg"
-                >
-                  {link.name}
-                </Link>
+                link.path.startsWith('/#') ? (
+                  <button
+                    key={link.name}
+                    onClick={() => handleNavClick(link.path)}
+                    className="text-left px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg"
+                  >
+                    {link.name}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-left px-4 py-3 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </nav>
             <div className="mt-6">

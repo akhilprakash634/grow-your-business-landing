@@ -12,6 +12,8 @@ import GMBOptimization from "../pages/resources/gmb-optimization";
 import WhatsAppMarketingUAE from "../pages/resources/whatsapp-marketing-uae";
 import FastWebsiteKerala from "../pages/resources/fast-website-kerala";
 import ChoosingITPartner from "../pages/resources/choosing-it-partner";
+import FirstClientPage from "../pages/first-client/page";
+import ThankYouPage from "../pages/thank-you/page";
 
 const routes: RouteObject[] = [
   {
@@ -61,6 +63,14 @@ const routes: RouteObject[] = [
   {
     path: "/resources/choosing-right-it-partner",
     element: <ChoosingITPartner />,
+  },
+  {
+    path: "/first-client",
+    element: <FirstClientPage />,
+  },
+  {
+    path: "/thank-you",
+    element: <ThankYouPage />,
   },
   {
     path: "*",
