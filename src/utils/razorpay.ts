@@ -87,8 +87,8 @@ export const initiateCheckout = async (options: PaymentOptions) => {
 
     const rzp = new window.Razorpay(rzpOptions);
     rzp.open();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Checkout error:', error);
-    alert('Could not initiate checkout. Is the backend server running?');
+    alert(`Checkout failed: ${error.message || 'An unexpected error occurred.'}`);
   }
 };
