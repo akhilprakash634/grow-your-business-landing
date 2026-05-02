@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config({ path: '../.env' });
 
-const SALES_FILE = path.join(__dirname, 'sales.json');
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+const SALES_FILE = path.join(DATA_DIR, 'sales.json');
 
 const getSalesCount = () => {
   try {
@@ -29,7 +30,11 @@ const incrementSalesCount = () => {
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://growyourbusiness.today', 'https://www.growyourbusiness.today'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
