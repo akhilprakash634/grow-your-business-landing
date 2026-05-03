@@ -16,8 +16,26 @@ interface PaymentOptions {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 export const initiateCheckout = async (options: PaymentOptions) => {
   try {
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      throw new Error('Razorpay SDK failed to load. Please check your internet connection or disable any adblockers.');
+    }
     // 1. Create order on the backend
     const orderResponse = await fetch(`${API_URL}/api/create-order`, {
       method: 'POST',
@@ -85,10 +103,14 @@ export const initiateCheckout = async (options: PaymentOptions) => {
       },
     };
 
+    if (typeof window.Razorpay !== 'function') {
+      throw new Error('Razorpay SDK failed to load. Please disable your adblocker or check your internet connection.');
+    }
+
     const rzp = new window.Razorpay(rzpOptions);
     rzp.open();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Checkout error:', error);
-    alert('Could not initiate checkout. Is the backend server running?');
+    alert(`Checkout failed: ${error.message || 'An unexpected error occurred.'}`);
   }
 };
