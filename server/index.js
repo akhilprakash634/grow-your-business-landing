@@ -79,10 +79,12 @@ const razorpay = new Razorpay({
 });
 
 // Configure Nodemailer Transporter for Zoho
+const smtpPort = parseInt(process.env.SMTP_PORT || '465');
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.zoho.in',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: true,
+  port: smtpPort,
+  secure: smtpPort === 465, // true for 465, false for other ports
+  requireTLS: true,
   auth: {
     user: process.env.SMTP_EMAIL,
     pass: process.env.SMTP_PASSWORD,
