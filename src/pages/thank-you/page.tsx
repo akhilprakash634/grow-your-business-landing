@@ -1,7 +1,16 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSEO } from '../../utils/seo';
-import { CheckCircle2, Download, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Unlock, Mail, Download, ExternalLink } from 'lucide-react';
 
 export default function ThankYouPage() {
+  const [buyerEmail, setBuyerEmail] = useState('');
+
+  useEffect(() => {
+    const email = localStorage.getItem('buyer_email') || '';
+    setBuyerEmail(email);
+  }, []);
+
   useSEO({
     title: 'Payment Successful | First Freelance Client System',
     description: 'Thank you for your purchase. You can now access the First Freelance Client System.',
@@ -25,24 +34,32 @@ export default function ThankYouPage() {
 
         <div className="bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6">
           <div className="space-y-2">
-            <h3 className="text-xl font-bold">Access Instructions</h3>
+            <h3 className="text-xl font-bold">Your Access is Ready</h3>
+            {buyerEmail && (
+              <div className="flex items-center justify-center gap-2 text-emerald-400 text-sm font-medium">
+                <Mail className="w-4 h-4" /> {buyerEmail}
+              </div>
+            )}
             <p className="text-gray-500">
-              Click the button below to view and download your system files.
+              Your email is your permanent key. Use it to access the content anytime.
             </p>
           </div>
 
-          <a 
+          <Link
+            to="/product-access"
+            className="w-full bg-emerald-500 text-white px-8 py-4 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
+          >
+            <Unlock className="w-6 h-6" /> VIEW MY CONTENT
+          </Link>
+
+          <a
             href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-emerald-500 text-white px-8 py-4 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
+            className="flex items-center justify-center gap-2 text-gray-500 hover:text-emerald-400 transition-colors text-sm"
           >
-            <Download className="w-6 h-6" /> DOWNLOAD SYSTEM
+            <Download className="w-4 h-4" /> Or download directly from OneDrive
           </a>
-
-          <div className="pt-4 flex items-center justify-center gap-2 text-gray-500 text-sm">
-            <ExternalLink className="w-4 h-4" /> Secure OneDrive Access
-          </div>
         </div>
 
         <button 

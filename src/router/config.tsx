@@ -14,6 +14,7 @@ import FastWebsiteKerala from "../pages/resources/fast-website-kerala";
 import ChoosingITPartner from "../pages/resources/choosing-it-partner";
 import FirstClientPage from "../pages/first-client/page";
 import ThankYouPage from "../pages/thank-you/page";
+import ProductAccessPage from "../pages/product-access/page";
 
 const routes: RouteObject[] = [
   {
@@ -71,6 +72,10 @@ const routes: RouteObject[] = [
   {
     path: "/thank-you",
     element: <ThankYouPage />,
+  },
+  {
+    path: "/product-access",
+    element: <ProductAccessPage />,
   },
   {
     path: "*",

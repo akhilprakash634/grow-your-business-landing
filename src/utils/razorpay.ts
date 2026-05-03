@@ -10,7 +10,9 @@ interface PaymentOptions {
   name: string;
   description: string;
   image?: string;
-  onSuccess: (response: any) => void;
+  buyerName?: string;
+  buyerEmail?: string;
+  onSuccess: (response: any, buyerEmail?: string) => void;
   onCancel?: () => void;
 }
 
@@ -36,20 +38,21 @@ export const initiateCheckout = async (options: PaymentOptions) => {
     if (!isScriptLoaded) {
       throw new Error('Razorpay SDK failed to load. Please check your internet connection or disable any adblockers.');
     }
-    // 1. Create order on the backend
+
+    // 1. Create order on the backend (pass buyer info for storage)
     const orderResponse = await fetch(`${API_URL}/api/create-order`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         amount: options.amount,
         currency: options.currency,
+        name: options.buyerName,
+        email: options.buyerEmail,
       }),
     });
 
     if (!orderResponse.ok) {
-      throw new Error('Failed to create order');
+      throw new Error('Failed to create order. Please try again.');
     }
 
     const orderData = await orderResponse.json();
@@ -64,22 +67,22 @@ export const initiateCheckout = async (options: PaymentOptions) => {
       image: options.image || 'https://static.readdy.ai/image/3a79f3d26d575281f009959c52307d03/4faeac9cacf9a888180dbe48ffa35e91.png',
       order_id: orderData.id,
       handler: async (response: any) => {
-        // 3. Verify payment on the backend
+        // 3. Verify payment on the backend (include buyer info)
         try {
           const verifyResponse = await fetch(`${API_URL}/api/verify-payment`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
+              buyer_email: options.buyerEmail,
+              buyer_name: options.buyerName,
             }),
           });
 
           if (verifyResponse.ok) {
-            options.onSuccess(response);
+            options.onSuccess(response, options.buyerEmail);
           } else {
             alert('Payment verification failed. Please contact support.');
           }
@@ -89,12 +92,12 @@ export const initiateCheckout = async (options: PaymentOptions) => {
         }
       },
       prefill: {
-        name: '',
-        email: '',
+        name: options.buyerName || '',
+        email: options.buyerEmail || '',
         contact: '',
       },
       theme: {
-        color: '#10b981', // Emerald matching the website theme
+        color: '#10b981',
       },
       modal: {
         ondismiss: () => {
