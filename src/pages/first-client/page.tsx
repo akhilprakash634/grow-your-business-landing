@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO, generateWebPageSchema } from '../../utils/seo';
 import { initiateCheckout } from '../../utils/razorpay';
+import Header from '../home/components/Header';
 import { CheckCircle2, ChevronRight, MessageSquare, Zap, Target, DollarSign, HelpCircle, ArrowRight, ShoppingCart, X, Lock, Star, Users } from 'lucide-react';
 
 export default function FirstClientPage() {
@@ -146,18 +147,7 @@ export default function FirstClientPage() {
       )}
 
       {/* Header */}
-      <nav className="p-6 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="text-xl font-bold tracking-tighter">
-          GROW YOUR <span className="text-emerald-500">BUSINESS</span>
-        </div>
-        <button
-          onClick={handleBuyNow}
-          disabled={isLoading}
-          className="bg-emerald-500 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-emerald-600 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70"
-        >
-          <ShoppingCart className="w-4 h-4" /> {isLoading ? 'Processing...' : 'BUY NOW'}
-        </button>
-      </nav>
+      <Header />
 
       <main>
         {/* Hero Section */}
@@ -279,15 +269,25 @@ export default function FirstClientPage() {
                 ))}
               </ul>
 
-              <button
-                onClick={handleBuyNow}
-                disabled={isLoading}
-                className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_50px_rgba(16,185,129,0.3)] disabled:opacity-70"
-              >
-                {isLoading ? 'Processing...' : 'BUY NOW ₹199'}
-              </button>
+              <div className="space-y-4">
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isLoading}
+                  className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_50px_rgba(16,185,129,0.3)] disabled:opacity-70"
+                >
+                  {isLoading ? 'Processing...' : 'BUY NOW ₹199'}
+                </button>
+                <a
+                  href="https://wa.me/918089106565"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <MessageSquare className="w-5 h-5" /> Have doubts? Connect on WhatsApp
+                </a>
+              </div>
               <p className="text-gray-500 text-sm flex items-center justify-center gap-2">
-                <Lock className="w-4 h-4" /> Secure Checkout by Razorpay
+                <Lock className="w-4 h-4" /> 24/7 Support · Secure Checkout
               </p>
 
               <div className="pt-4 flex items-center justify-center gap-2">
