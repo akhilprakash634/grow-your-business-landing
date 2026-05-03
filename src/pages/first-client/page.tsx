@@ -14,6 +14,7 @@ export default function FirstClientPage() {
   const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top when page loads
     const fetchSalesCount = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/sales-count`);
@@ -206,11 +207,11 @@ export default function FirstClientPage() {
           </div>
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-3xl blur opacity-20 group-hover:opacity-30 transition-all" />
-            <div className="relative aspect-square lg:aspect-[4/5] bg-gray-900 rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center">
+            <div className="relative aspect-square lg:aspect-[4/5] bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center p-4">
               <img
                 src="/product-hero.png"
                 alt="First Freelance Client System Playbook"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           </div>
