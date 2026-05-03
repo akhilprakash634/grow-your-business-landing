@@ -91,7 +91,7 @@ export default function FirstClientPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-emerald-500 selection:text-white">
-      
+
       {/* Email Collection Modal */}
       {showEmailModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -100,7 +100,7 @@ export default function FirstClientPage() {
             <button onClick={() => setShowEmailModal(false)} className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors">
               <X className="w-5 h-5" />
             </button>
-            
+
             <div className="text-center mb-8">
               <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Lock className="w-7 h-7 text-emerald-400" />
@@ -132,7 +132,7 @@ export default function FirstClientPage() {
                 />
               </div>
               {emailError && <p className="text-red-400 text-sm">{emailError}</p>}
-              
+
               <button
                 type="submit"
                 className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-bold text-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
@@ -171,7 +171,7 @@ export default function FirstClientPage() {
             {/* Social proof stars */}
             <div className="flex items-center gap-2">
               <div className="flex">
-                {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
+                {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
               </div>
               <span className="text-sm text-gray-400 ml-1">Loved by {salesCount}+ freelancers</span>
             </div>
@@ -187,7 +187,7 @@ export default function FirstClientPage() {
               <div className="flex flex-col justify-center items-center sm:items-start">
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
-                    {[1,2,3].map(i => (
+                    {[1, 2, 3].map(i => (
                       <div key={i} className="w-8 h-8 rounded-full border-2 border-black bg-gradient-to-br from-emerald-800 to-emerald-600" />
                     ))}
                   </div>
@@ -292,7 +292,7 @@ export default function FirstClientPage() {
 
               <div className="pt-4 flex items-center justify-center gap-2">
                 <div className="flex -space-x-1">
-                  {[1,2,3,4,5].map(i => (
+                  {[1, 2, 3, 4, 5].map(i => (
                     <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-gradient-to-br from-emerald-800 to-emerald-600" />
                   ))}
                 </div>
