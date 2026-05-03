@@ -46,7 +46,7 @@ export default function FirstClientPage() {
     setIsLoading(true);
     setShowEmailModal(false);
     initiateCheckout({
-      amount: 19900, // ₹199 in paise
+      amount: 100, // ₹1 for testing (100 paise)
       currency: 'INR',
       name: 'First Freelance Client System',
       description: 'Digital Playbook for Beginners',
