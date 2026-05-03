@@ -4,6 +4,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
@@ -77,6 +78,55 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+// Configure Nodemailer Transporter for Zoho
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.zoho.in',
+  port: parseInt(process.env.SMTP_PORT || '465'),
+  secure: true,
+  auth: {
+    user: process.env.SMTP_EMAIL,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
+
+const sendConfirmationEmail = async (email, name) => {
+  if (!process.env.SMTP_PASSWORD) {
+    console.log('Skipping email send: SMTP_PASSWORD not configured in .env');
+    return;
+  }
+  
+  const firstName = name ? name.split(' ')[0] : 'Freelancer';
+  const mailOptions = {
+    from: `"Grow Your Business" <${process.env.SMTP_EMAIL}>`,
+    to: email,
+    subject: 'Welcome to the First Freelance Client System! 🎉',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+        <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
+        <p>Thank you for purchasing the <strong>First Freelance Client System</strong>.</p>
+        <p>Your journey to landing high-paying clients starts today. We've unlocked everything for you.</p>
+
+        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
+          <p>You can access your complete PDF playbook and bonus templates via our secure OneDrive link here:</p>
+          <a href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+        </div>
+
+        <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 80891 06565).</p>
+        
+        <p>To your success,<br/><strong>The Grow Your Business Team</strong></p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Confirmation email sent to ${email}`);
+  } catch (error) {
+    console.error('Error sending confirmation email:', error);
+  }
+};
+
 // Get sales count
 app.get('/api/sales-count', (req, res) => {
   res.json({ count: getSalesCount() });
@@ -128,6 +178,8 @@ app.post('/api/verify-payment', (req, res) => {
       incrementSalesCount();
       if (buyer_email) {
         addBuyer(buyer_email, buyer_name);
+        // Send email asynchronously so it doesn't block the API response
+        sendConfirmationEmail(buyer_email, buyer_name);
       }
       res.json({ status: 'success', message: 'Payment verified successfully' });
     } else {

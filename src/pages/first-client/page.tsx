@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO, generateWebPageSchema } from '../../utils/seo';
 import { initiateCheckout } from '../../utils/razorpay';
+import Header from '../home/components/Header';
 import { CheckCircle2, ChevronRight, MessageSquare, Zap, Target, DollarSign, HelpCircle, ArrowRight, ShoppingCart, X, Lock, Star, Users } from 'lucide-react';
 
 export default function FirstClientPage() {
@@ -45,7 +46,7 @@ export default function FirstClientPage() {
     setIsLoading(true);
     setShowEmailModal(false);
     initiateCheckout({
-      amount: 19900, // ₹199 in paise
+      amount: 100, // ₹1 for testing (100 paise)
       currency: 'INR',
       name: 'First Freelance Client System',
       description: 'Digital Playbook for Beginners',
@@ -90,7 +91,7 @@ export default function FirstClientPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-emerald-500 selection:text-white">
-      
+
       {/* Email Collection Modal */}
       {showEmailModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -99,7 +100,7 @@ export default function FirstClientPage() {
             <button onClick={() => setShowEmailModal(false)} className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors">
               <X className="w-5 h-5" />
             </button>
-            
+
             <div className="text-center mb-8">
               <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Lock className="w-7 h-7 text-emerald-400" />
@@ -131,7 +132,7 @@ export default function FirstClientPage() {
                 />
               </div>
               {emailError && <p className="text-red-400 text-sm">{emailError}</p>}
-              
+
               <button
                 type="submit"
                 className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-bold text-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
@@ -146,18 +147,7 @@ export default function FirstClientPage() {
       )}
 
       {/* Header */}
-      <nav className="p-6 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="text-xl font-bold tracking-tighter">
-          GROW YOUR <span className="text-emerald-500">BUSINESS</span>
-        </div>
-        <button
-          onClick={handleBuyNow}
-          disabled={isLoading}
-          className="bg-emerald-500 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-emerald-600 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70"
-        >
-          <ShoppingCart className="w-4 h-4" /> {isLoading ? 'Processing...' : 'BUY NOW'}
-        </button>
-      </nav>
+      <Header />
 
       <main>
         {/* Hero Section */}
@@ -181,7 +171,7 @@ export default function FirstClientPage() {
             {/* Social proof stars */}
             <div className="flex items-center gap-2">
               <div className="flex">
-                {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
+                {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
               </div>
               <span className="text-sm text-gray-400 ml-1">Loved by {salesCount}+ freelancers</span>
             </div>
@@ -197,7 +187,7 @@ export default function FirstClientPage() {
               <div className="flex flex-col justify-center items-center sm:items-start">
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
-                    {[1,2,3].map(i => (
+                    {[1, 2, 3].map(i => (
                       <div key={i} className="w-8 h-8 rounded-full border-2 border-black bg-gradient-to-br from-emerald-800 to-emerald-600" />
                     ))}
                   </div>
@@ -279,20 +269,30 @@ export default function FirstClientPage() {
                 ))}
               </ul>
 
-              <button
-                onClick={handleBuyNow}
-                disabled={isLoading}
-                className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_50px_rgba(16,185,129,0.3)] disabled:opacity-70"
-              >
-                {isLoading ? 'Processing...' : 'BUY NOW ₹199'}
-              </button>
+              <div className="space-y-4">
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isLoading}
+                  className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-2xl hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-95 shadow-[0_20px_50px_rgba(16,185,129,0.3)] disabled:opacity-70"
+                >
+                  {isLoading ? 'Processing...' : 'BUY NOW ₹199'}
+                </button>
+                <a
+                  href="https://wa.me/918089106565"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <MessageSquare className="w-5 h-5" /> Have doubts? Connect on WhatsApp
+                </a>
+              </div>
               <p className="text-gray-500 text-sm flex items-center justify-center gap-2">
-                <Lock className="w-4 h-4" /> Secure Checkout by Razorpay
+                <Lock className="w-4 h-4" /> 24/7 Support · Secure Checkout
               </p>
 
               <div className="pt-4 flex items-center justify-center gap-2">
                 <div className="flex -space-x-1">
-                  {[1,2,3,4,5].map(i => (
+                  {[1, 2, 3, 4, 5].map(i => (
                     <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-gradient-to-br from-emerald-800 to-emerald-600" />
                   ))}
                 </div>
