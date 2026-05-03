@@ -4,7 +4,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const SALES_FILE = path.join(DATA_DIR, 'sales.json');
@@ -35,6 +35,18 @@ app.use(cors({
   methods: ['GET', 'POST'],
   credentials: true
 }));
+
+// Simple request logger
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const status = res.statusCode;
+    const color = status >= 500 ? '\x1b[31m' : status >= 400 ? '\x1b[33m' : '\x1b[32m';
+    console.log(`${color}[${new Date().toISOString()}] ${req.method} ${req.path} → ${status} (${duration}ms)\x1b[0m`);
+  });
+  next();
+});
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
