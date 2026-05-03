@@ -105,17 +105,12 @@ const sendConfirmationEmail = async (email, name) => {
         <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
         <p>Thank you for purchasing the <strong>First Freelance Client System</strong>.</p>
         <p>Your journey to landing high-paying clients starts today. We've unlocked everything for you.</p>
-        
-        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="margin-top: 0;">How to access your product:</h3>
-          <p>Your email address (<strong>${email}</strong>) is your permanent key.</p>
-          <p>You can access the full playbook, bonus templates, and download your PDF by visiting your private access page:</p>
-          <a href="https://growyourbusiness.today/product-access" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Access My Content</a>
-        </div>
 
-        <p><strong>Direct PDF Link:</strong><br/>
-        If you just want to download the PDF directly, you can access it via our secure OneDrive link here:<br/>
-        <a href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0" style="color: #10b981;">Download Complete PDF</a></p>
+        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
+          <p>You can access your complete PDF playbook and bonus templates via our secure OneDrive link here:</p>
+          <a href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+        </div>
 
         <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 80891 06565).</p>
         
