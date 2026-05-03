@@ -201,7 +201,9 @@ export default function ProductAccessPage() {
             <h2 className="text-2xl font-bold">Download Your Copy</h2>
             <p className="text-gray-400">Your complete PDF with all chapters and bonus templates is ready.</p>
             <a
-              href="#"
+              href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
             >
               <Download className="w-5 h-5" /> Download PDF
