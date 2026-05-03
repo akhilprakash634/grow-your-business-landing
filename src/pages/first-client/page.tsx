@@ -161,38 +161,40 @@ export default function FirstClientPage() {
 
       <main>
         {/* Hero Section */}
-        <section className="px-6 pt-20 pb-32 max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+        <section className="px-6 pt-12 pb-24 md:pt-20 md:pb-32 max-w-7xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="space-y-6 lg:space-y-8 lg:col-span-7">
             <div className="flex flex-wrap gap-2">
-              <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold tracking-wider border border-emerald-500/20">
+              <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider border border-emerald-500/20">
                 <Zap className="w-3 h-3" /> LAUNCH OFFER: ₹199 ONLY
               </div>
-              <div className="inline-flex items-center gap-2 bg-white/5 text-gray-400 px-3 py-1 rounded-full text-xs font-bold border border-white/10">
+              <div className="inline-flex items-center gap-2 bg-white/5 text-gray-400 px-3 py-1.5 rounded-full text-xs font-bold border border-white/10">
                 <Users className="w-3 h-3" /> {salesCount} buyers
               </div>
             </div>
-            <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight">
               Get Your First <span className="text-emerald-400">Freelance Client</span> in 72 Hours
             </h1>
-            <p className="text-xl text-gray-400 max-w-xl">
+            <p className="text-lg sm:text-xl text-gray-400 max-w-xl leading-relaxed">
               The exact step-by-step system for beginners to land high-paying clients without any prior experience or portfolio.
             </p>
 
             {/* Social proof stars */}
             <div className="flex items-center gap-2">
-              {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
+              <div className="flex">
+                {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
+              </div>
               <span className="text-sm text-gray-400 ml-1">Loved by {salesCount}+ freelancers</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 pt-4">
+            <div className="flex flex-col sm:flex-row gap-5 pt-2">
               <button
                 onClick={handleBuyNow}
                 disabled={isLoading}
-                className="bg-emerald-500 text-white px-8 py-4 rounded-xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 group shadow-[0_20px_50px_rgba(16,185,129,0.3)] disabled:opacity-70"
+                className="w-full sm:w-auto bg-emerald-500 text-white px-8 py-4 rounded-xl font-black text-lg sm:text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 group shadow-[0_15px_40px_rgba(16,185,129,0.3)] disabled:opacity-70"
               >
                 {isLoading ? 'Opening...' : <>Buy Now ₹199 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></>}
               </button>
-              <div className="flex flex-col justify-center">
+              <div className="flex flex-col justify-center items-center sm:items-start">
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
                     {[1,2,3].map(i => (
@@ -205,9 +207,9 @@ export default function FirstClientPage() {
               </div>
             </div>
           </div>
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-3xl blur opacity-20 group-hover:opacity-30 transition-all" />
-            <div className="relative aspect-square lg:aspect-[4/5] bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center p-4">
+          <div className="lg:col-span-5 w-full max-w-md mx-auto lg:max-w-none relative group mt-8 lg:mt-0">
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-[2rem] blur opacity-20 group-hover:opacity-30 transition-all" />
+            <div className="relative aspect-square sm:aspect-[4/5] bg-[#0a0a0a] rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center p-4 sm:p-6 shadow-2xl">
               <img
                 src="/product-hero.png"
                 alt="First Freelance Client System Playbook"
