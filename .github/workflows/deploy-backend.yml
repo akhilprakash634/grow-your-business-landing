@@ -32,6 +32,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /var/www/html/paymentgateway/server
+            sudo cp /home/ubuntu/secret/paymentgateway/.env ./.env
+            sudo chown ubuntu:ubuntu ./.env
             npm install
             
             # Check if PM2 process exists, restart if it does, start if it doesn't
