@@ -108,20 +108,20 @@ const sendConfirmationEmail = async (email, name) => {
         <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
         <p>Thank you for purchasing the <strong>First Freelance Client System</strong>.</p>
         <p>Your journey to landing high-paying clients starts today. We've unlocked everything for you.</p>
-
+ 
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
           <p>You can access your complete PDF playbook and bonus templates via our secure OneDrive link here:</p>
           <a href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
         </div>
-
+ 
         <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
         
         <p>To your success,<br/><strong>The Grow Your Business Team</strong></p>
       </div>
     `
   };
-
+ 
   try {
     await transporter.sendMail(mailOptions);
     console.log(`Confirmation email sent to ${email}`);
@@ -189,7 +189,6 @@ app.post('/api/verify-payment', (req, res) => {
       incrementSalesCount();
       if (buyer_email) {
         addBuyer(buyer_email, buyer_name);
-        // Send email asynchronously so it doesn't block the API response
         sendConfirmationEmail(buyer_email, buyer_name);
       }
       res.json({ status: 'success', message: 'Payment verified successfully' });
@@ -224,10 +223,6 @@ app.post('/api/register-purchase', async (req, res) => {
     if (!payment_id || !email) {
       return res.status(400).json({ error: 'Payment ID and email are required' });
     }
-
-    // Optional: Verify payment_id status with Razorpay if needed
-    // For now, we trust the registration if it comes with a valid-looking payment_id
-    // to keep the flow fast and simple as requested.
     
     addBuyer(email, name || 'Learner');
     await sendConfirmationEmail(email, name || 'Learner');
