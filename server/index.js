@@ -4,7 +4,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer'); 
 require('dotenv').config();
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
