@@ -42,4 +42,4 @@ jobs:
             else
               pm2 start index.js --name "gyb-backend"
             fi
-            pm2 save
+            pm2 save 
