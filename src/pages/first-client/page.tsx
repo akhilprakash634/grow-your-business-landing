@@ -278,7 +278,7 @@ export default function FirstClientPage() {
                   {isLoading ? 'Processing...' : 'BUY NOW ₹199'}
                 </button>
                 <a
-                  href="https://wa.me/918089106565"
+                  href="https://wa.me/916282863459"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2"
