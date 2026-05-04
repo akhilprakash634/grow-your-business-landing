@@ -36,7 +36,7 @@ export default function FirstClientPage() {
   const handleBuyNow = () => {
     setIsLoading(true);
     initiateCheckout({
-      amount: 100, // ₹1 in paise
+      amount: 19900, // ₹199 in paise
       currency: 'INR',
       name: 'First Freelance Client System',
       description: 'Digital Playbook for Beginners',
@@ -76,7 +76,7 @@ export default function FirstClientPage() {
           <div className="space-y-6 lg:space-y-8 lg:col-span-7">
             <div className="flex flex-wrap gap-2">
               <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider border border-emerald-500/20">
-                <Zap className="w-3 h-3" /> LAUNCH OFFER: ₹1 ONLY
+                <Zap className="w-3 h-3" /> LAUNCH OFFER: ₹199 ONLY
               </div>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
@@ -94,7 +94,7 @@ export default function FirstClientPage() {
                   className="w-full sm:w-fit bg-emerald-500 text-white px-10 py-5 rounded-2xl font-black text-xl sm:text-2xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 group shadow-[0_20px_50px_rgba(16,185,129,0.4)] hover:shadow-[0_25px_60px_rgba(16,185,129,0.5)] active:scale-[0.98] relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  {isLoading ? 'Opening Checkout...' : <>Get Access Now ₹1 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
+                  {isLoading ? 'Opening Checkout...' : <>Get Access Now ₹199 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
                 </button>
                 
                 <a 
@@ -241,7 +241,7 @@ export default function FirstClientPage() {
           disabled={isLoading}
           className="w-full bg-emerald-500 text-white py-4 rounded-xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-95 transition-all"
         >
-          {isLoading ? 'Loading...' : 'GET ACCESS NOW ₹1'}
+          {isLoading ? 'Loading...' : 'GET ACCESS NOW ₹199'}
         </button>
       </div>
 
