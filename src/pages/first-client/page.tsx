@@ -41,7 +41,6 @@ export default function FirstClientPage() {
       name: 'First Freelance Client System',
       description: 'Digital Playbook for Beginners',
       onSuccess: (response) => {
-        // Redirect to thank you page with payment ID to collect email
         navigate(`/thank-you?payment_id=${response.razorpay_payment_id}`);
       },
       onCancel: () => setIsLoading(false),
@@ -79,14 +78,6 @@ export default function FirstClientPage() {
               <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider border border-emerald-500/20">
                 <Zap className="w-3 h-3" /> LAUNCH OFFER: ₹199 ONLY
               </div>
-              <a 
-                href="https://wa.me/916282863459"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-3 py-1.5 rounded-full text-xs font-bold border border-[#25D366]/20 hover:bg-[#25D366]/20 transition-all group"
-              >
-                <MessageSquare className="w-3 h-3 group-hover:scale-110 transition-transform" /> HAVE DOUBTS? CONTACT NOW (24/7 SUPPORT)
-              </a>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
               Get Your First <span className="text-emerald-400">Freelance Client</span> in 72 Hours
@@ -95,15 +86,27 @@ export default function FirstClientPage() {
               The exact step-by-step system for beginners to land high-paying clients without any prior experience or portfolio.
             </p>
 
-            <div className="flex flex-col gap-4 pt-2">
-              <button
-                onClick={handleBuyNow}
-                disabled={isLoading}
-                className="w-full sm:w-fit bg-emerald-500 text-white px-10 py-5 rounded-2xl font-black text-xl sm:text-2xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 group shadow-[0_20px_50px_rgba(16,185,129,0.4)] hover:shadow-[0_25px_60px_rgba(16,185,129,0.5)] active:scale-[0.98] relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                {isLoading ? 'Opening Secure Checkout...' : <>Get Access Now ₹199 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
-              </button>
+            <div className="flex flex-col gap-6 pt-2">
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isLoading}
+                  className="w-full sm:w-fit bg-emerald-500 text-white px-10 py-5 rounded-2xl font-black text-xl sm:text-2xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 group shadow-[0_20px_50px_rgba(16,185,129,0.4)] hover:shadow-[0_25px_60px_rgba(16,185,129,0.5)] active:scale-[0.98] relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  {isLoading ? 'Opening Checkout...' : <>Get Access Now ₹199 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
+                </button>
+                
+                <a 
+                  href="https://wa.me/916282863459"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-fit bg-[#25D366]/10 text-[#25D366] px-8 py-5 rounded-2xl font-bold text-lg border border-[#25D366]/20 hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <MessageSquare className="w-5 h-5 group-hover:rotate-12 transition-transform" /> Have Doubts? Contact
+                </a>
+              </div>
+              
               <div className="flex items-center gap-2 text-gray-500 text-sm font-medium px-1">
                 <ShieldCheck className="w-4 h-4 text-emerald-500/50" />
                 <span>Instant access after payment • Beginner friendly • No experience needed</span>
@@ -122,7 +125,7 @@ export default function FirstClientPage() {
           </div>
         </section>
 
-        {/* How it works (Real Example) - NEW SECTION */}
+        {/* How it works (Real Example) */}
         <section className="py-24 px-6 bg-gradient-to-b from-transparent to-white/[0.02]">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16 space-y-4">
@@ -206,8 +209,6 @@ export default function FirstClientPage() {
             </div>
           </div>
         </section>
-
-
 
         {/* FAQ */}
         <section className="py-24 px-6 bg-white/5">
