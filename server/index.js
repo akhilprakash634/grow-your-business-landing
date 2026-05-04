@@ -209,6 +209,21 @@ app.post('/api/check-access', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Keep-alive ping for Render
+const pingBackend = () => {
+  const url = process.env.BACKEND_URL || `http://localhost:${PORT}`;
+  const client = url.startsWith('https') ? require('https') : require('http');
+  client.get(`${url}/api/sales-count`, (res) => {
+    console.log(`Keep-alive ping: ${res.statusCode}`);
+  }).on('error', (err) => {
+    console.error(`Keep-alive ping failed: ${err.message}`);
+  });
+};
+
+// Run every 5 minutes (300,000 milliseconds)
+setInterval(pingBackend, 5 * 60 * 1000);
+
 app.listen(PORT, () => {
   console.log(`\x1b[36m✓ Server running on port ${PORT}\x1b[0m`);
 });
