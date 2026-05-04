@@ -3,7 +3,7 @@ name: Deploy Node Backend to AWS Lightsail
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - 'server/**'
 
