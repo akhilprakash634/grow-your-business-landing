@@ -73,10 +73,15 @@ app.use((req, res, next) => {
   next();
 });
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let razorpay;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+} else {
+  console.error('\x1b[31mError: RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET is missing in .env\x1b[0m');
+}
 
 // Configure Nodemailer Transporter for Zoho
 const smtpPort = parseInt(process.env.SMTP_PORT || '465');
@@ -129,6 +134,11 @@ const sendConfirmationEmail = async (email, name) => {
   }
 };
 
+// Health check
+app.get('/', (req, res) => {
+  res.json({ status: 'active', message: 'Grow Your Business API is running' });
+});
+
 // Get sales count
 app.get('/api/sales-count', (req, res) => {
   res.json({ count: getSalesCount() });
@@ -137,6 +147,9 @@ app.get('/api/sales-count', (req, res) => {
 // Create order — accepts name + email for prefill and later storage
 app.post('/api/create-order', async (req, res) => {
   try {
+    if (!razorpay) {
+      return res.status(500).json({ error: 'Payment gateway not initialized. Check server logs.' });
+    }
     const { amount, currency = 'INR', receipt = 'receipt_' + Date.now(), name, email } = req.body;
 
     if (!amount || amount < 100) {
@@ -227,4 +240,3 @@ setInterval(pingBackend, 5 * 60 * 1000);
 app.listen(PORT, () => {
   console.log(`\x1b[36m✓ Server running on port ${PORT}\x1b[0m`);
 });
-// trigger ci
