@@ -25,7 +25,7 @@ jobs:
           target: "/var/www/html/paymentgateway"
 
       - name: Install Dependencies and Restart PM2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master 
         with:
           host: 43.205.229.25
           username: ubuntu
