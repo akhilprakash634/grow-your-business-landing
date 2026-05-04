@@ -55,11 +55,7 @@ const addBuyer = (email, name) => {
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://growyourbusiness.today', 'https://www.growyourbusiness.today'],
-  methods: ['GET', 'POST'],
-  credentials: true
-}));
+app.use(cors()); // Allow all origins for testing and unblock localhost/production mix
 
 // Simple request logger
 app.use((req, res, next) => {
