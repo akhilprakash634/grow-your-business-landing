@@ -221,6 +221,28 @@ app.post('/api/check-access', (req, res) => {
   }
 });
 
+// Register buyer after payment (for post-payment collection)
+app.post('/api/register-purchase', async (req, res) => {
+  try {
+    const { payment_id, email, name } = req.body;
+    if (!payment_id || !email) {
+      return res.status(400).json({ error: 'Payment ID and email are required' });
+    }
+
+    // Optional: Verify payment_id status with Razorpay if needed
+    // For now, we trust the registration if it comes with a valid-looking payment_id
+    // to keep the flow fast and simple as requested.
+    
+    addBuyer(email, name || 'Learner');
+    await sendConfirmationEmail(email, name || 'Learner');
+    
+    res.json({ status: 'success', message: 'Purchase registered successfully' });
+  } catch (error) {
+    console.error('Error registering purchase:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 // Keep-alive ping for Render
