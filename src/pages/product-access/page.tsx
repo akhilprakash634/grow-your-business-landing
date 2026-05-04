@@ -214,7 +214,7 @@ export default function ProductAccessPage() {
           {/* Footer note */}
           <p className="text-center text-gray-600 text-sm pb-8">
             Questions? WhatsApp us at{' '}
-            <a href="https://wa.me/918089106565" className="text-emerald-400 hover:underline">+91 80891 06565</a>
+            <a href="https://wa.me/916282863459" className="text-emerald-400 hover:underline">+91 62828 63459</a>
           </p>
         </div>
       )}
