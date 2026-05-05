@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSEO, generateWebPageSchema } from '../../utils/seo';
 import { initiateCheckout } from '../../utils/razorpay';
 import Header from '../home/components/Header';
-import { CheckCircle2, ChevronRight, MessageSquare, Zap, Target, DollarSign, HelpCircle, ArrowRight, X, Lock, Star, Users, ShieldCheck, Sparkles } from 'lucide-react';
+import SupportModal from '../home/components/SupportModal';
+import { CheckCircle2, ChevronRight, MessageSquare, Zap, Target, DollarSign, HelpCircle, ArrowRight, X, Lock, Star, Users, ShieldCheck, Sparkles, Headphones } from 'lucide-react';
 
 export default function FirstClientPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -96,15 +98,13 @@ export default function FirstClientPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                   {isLoading ? 'Opening Checkout...' : <>Get Access Now ₹199 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
                 </button>
-                
-                <a 
-                  href="https://wa.me/916282863459"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-fit bg-[#25D366]/10 text-[#25D366] px-8 py-5 rounded-2xl font-bold text-lg border border-[#25D366]/20 hover:bg-[#25D366]/20 transition-all flex items-center justify-center gap-2 group"
+
+                <button
+                  onClick={() => setIsSupportModalOpen(true)}
+                  className="w-full sm:w-fit bg-emerald-500/5 text-emerald-400 px-8 py-5 rounded-2xl font-bold text-lg border border-emerald-500/10 hover:bg-emerald-500/10 transition-all flex items-center justify-center gap-2 group h-[68px] sm:h-[76px]"
                 >
-                  <MessageSquare className="w-5 h-5 group-hover:rotate-12 transition-transform" /> Have Doubts? Contact
-                </a>
+                  <Headphones className="w-5 h-5 group-hover:-rotate-12 transition-transform" /> Already Purchased? Get 1:1 Support
+                </button>
               </div>
               
               <div className="flex items-center gap-2 text-gray-500 text-sm font-medium px-1">
@@ -248,6 +248,11 @@ export default function FirstClientPage() {
       <footer className="py-12 px-6 border-t border-white/5 text-center text-gray-500 text-sm">
         <p>© 2024 Grow Your Business. All rights reserved.</p>
       </footer>
+
+      <SupportModal 
+        isOpen={isSupportModalOpen} 
+        onClose={() => setIsSupportModalOpen(false)} 
+      />
     </div>
   );
 }
