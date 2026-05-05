@@ -42,8 +42,9 @@ export default function FirstClientPage() {
       currency: 'INR',
       name: 'First Freelance Client System',
       description: 'Digital Playbook for Beginners',
+      productId: 'first-client',
       onSuccess: (response) => {
-        navigate(`/thank-you?payment_id=${response.razorpay_payment_id}`);
+        navigate(`/thank-you?payment_id=${response.razorpay_payment_id}&product_id=first-client`);
       },
       onCancel: () => setIsLoading(false),
     });

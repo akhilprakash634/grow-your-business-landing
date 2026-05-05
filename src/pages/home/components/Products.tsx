@@ -10,7 +10,19 @@ const products = [
     oldPrice: '₹299',
     type: 'Digital System (PDF)',
     link: '/first-client',
-    tag: 'Bestseller'
+    tag: 'Bestseller',
+    image: '/product-hero.png'
+  },
+  {
+    id: 'women-income-ideas',
+    name: 'Income Making Ideas for Women (Hindi/Marathi)',
+    description: '50+ proven work-from-home and business ideas for women in Hindi and Marathi. Start with zero investment.',
+    price: '₹99',
+    oldPrice: '₹199',
+    type: 'Digital Guide (PDF)',
+    link: '/women-income-ideas',
+    tag: 'New',
+    image: '/women-income.png'
   },
   {
     id: 'agency-templates',
@@ -51,8 +63,8 @@ export default function Products() {
               <div className="flex flex-col md:flex-row gap-6 items-center">
                 {/* Product Image - Smaller and Responsive */}
                 <div className="w-full md:w-32 lg:w-40 aspect-square bg-emerald-500/10 rounded-xl overflow-hidden flex-shrink-0 group-hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] transition-all">
-                  {product.id === 'first-client' ? (
-                    <img src="/product-hero.png" alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  {product.image ? (
+                    <img src={product.image} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-emerald-400">
                       <Layout className="w-8 h-8" />

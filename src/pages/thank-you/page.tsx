@@ -17,6 +17,20 @@ export default function ThankYouPage() {
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   
   const paymentId = searchParams.get('payment_id');
+  const productId = searchParams.get('product_id') || 'first-client';
+
+  const products = {
+    'first-client': {
+      name: 'First Freelance Client System',
+      link: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0'
+    },
+    'women-income-ideas': {
+      name: 'Income Making Ideas for Women',
+      link: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQA3xstO1F2QQ5MJln5pbsWjATn7PiEth5ZIi-qeIHsC5ZE?e=Sw94mO'
+    }
+  };
+
+  const product = products[productId as keyof typeof products] || products['first-client'];
 
   useEffect(() => {
     const email = localStorage.getItem('buyer_email');
@@ -27,7 +41,7 @@ export default function ThankYouPage() {
   }, []);
 
   useSEO({
-    title: 'Payment Successful | First Freelance Client System',
+    title: 'Payment Successful | Grow Your Business',
     description: 'Thank you for your purchase. Please register your email to get instant access.',
     canonical: '/thank-you',
   });
@@ -78,7 +92,7 @@ export default function ThankYouPage() {
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Payment Successful!</h1>
           <p className="text-gray-400">
-            Thank you for your purchase. One last step to unlock your access.
+            Thank you for purchasing <strong>{product.name}</strong>.
           </p>
         </div>
 
@@ -125,7 +139,7 @@ export default function ThankYouPage() {
               <div className="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold mb-2">
                 <Unlock className="w-3 h-3" /> ACCESS UNLOCKED
               </div>
-              <h3 className="text-2xl font-bold">Your Playbook is Ready</h3>
+              <h3 className="text-2xl font-bold">Your Product is Ready</h3>
               <div className="flex items-center justify-center gap-2 text-emerald-400 text-sm font-medium">
                 <Mail className="w-4 h-4" /> {buyerEmail}
               </div>
@@ -136,7 +150,7 @@ export default function ThankYouPage() {
 
             <div className="space-y-4">
               <a
-                href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0"
+                href={product.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
