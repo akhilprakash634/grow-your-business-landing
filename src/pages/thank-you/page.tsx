@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSEO } from '../../utils/seo';
-import { CheckCircle2, Unlock, Mail, Download, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Unlock, Mail, Download, Loader2, ArrowRight, Headphones } from 'lucide-react';
+import SupportModal from '../home/components/SupportModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -13,6 +14,7 @@ export default function ThankYouPage() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   
   const paymentId = searchParams.get('payment_id');
 
@@ -148,6 +150,15 @@ export default function ThankYouPage() {
               >
                 Go to Online Access Page <ArrowRight className="w-4 h-4" />
               </button>
+
+              <div className="pt-4 border-t border-white/5">
+                <button
+                  onClick={() => setIsSupportModalOpen(true)}
+                  className="w-full bg-emerald-500/10 text-emerald-400 py-4 rounded-xl font-bold text-sm hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2 border border-emerald-500/20"
+                >
+                  <Headphones className="w-4 h-4" /> Need help? Get Free 1:1 Support
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -159,6 +170,11 @@ export default function ThankYouPage() {
           Back to Home
         </button>
       </div>
+
+      <SupportModal 
+        isOpen={isSupportModalOpen} 
+        onClose={() => setIsSupportModalOpen(false)} 
+      />
     </div>
   );
 }
