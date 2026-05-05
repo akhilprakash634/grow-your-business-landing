@@ -13,6 +13,7 @@ import WhatsAppMarketingUAE from "../pages/resources/whatsapp-marketing-uae";
 import FastWebsiteKerala from "../pages/resources/fast-website-kerala";
 import ChoosingITPartner from "../pages/resources/choosing-it-partner";
 import FirstClientPage from "../pages/first-client/page";
+import WomenIncomeIdeasPage from "../pages/women-income-ideas/page";
 import ThankYouPage from "../pages/thank-you/page";
 import ProductAccessPage from "../pages/product-access/page";
 
@@ -68,6 +69,10 @@ const routes: RouteObject[] = [
   {
     path: "/first-client",
     element: <FirstClientPage />,
+  },
+  {
+    path: "/women-income-ideas",
+    element: <WomenIncomeIdeasPage />,
   },
   {
     path: "/thank-you",

@@ -92,27 +92,41 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendConfirmationEmail = async (email, name) => {
+const PRODUCTS = {
+  'first-client': {
+    name: 'First Freelance Client System',
+    downloadLink: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0',
+    subject: 'Welcome to the First Freelance Client System! 🎉'
+  },
+  'women-income-ideas': {
+    name: 'Income Making Ideas for Women (Hindi/Marathi)',
+    downloadLink: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQA3xstO1F2QQ5MJln5pbsWjATn7PiEth5ZIi-qeIHsC5ZE?e=Sw94mO',
+    subject: 'Welcome to Income Making Ideas for Women! 🎉'
+  }
+};
+
+const sendConfirmationEmail = async (email, name, productId = 'first-client') => {
   if (!process.env.SMTP_PASSWORD) {
     console.log('Skipping email send: SMTP_PASSWORD not configured in .env');
     return;
   }
   
+  const product = PRODUCTS[productId] || PRODUCTS['first-client'];
   const firstName = name ? name.split(' ')[0] : 'Freelancer';
   const mailOptions = {
     from: `"Grow Your Business" <${process.env.SMTP_EMAIL}>`,
     to: email,
-    subject: 'Welcome to the First Freelance Client System! 🎉',
+    subject: product.subject,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
         <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
-        <p>Thank you for purchasing the <strong>First Freelance Client System</strong>.</p>
-        <p>Your journey to landing high-paying clients starts today. We've unlocked everything for you.</p>
+        <p>Thank you for purchasing the <strong>${product.name}</strong>.</p>
+        <p>We've unlocked everything for you. Your journey starts today.</p>
  
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
-          <p>You can access your complete PDF playbook and bonus templates via our secure OneDrive link here:</p>
-          <a href="https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+          <p>You can access your complete PDF playbook via our secure OneDrive link here:</p>
+          <a href="${product.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
         </div>
  
         <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
@@ -124,7 +138,7 @@ const sendConfirmationEmail = async (email, name) => {
  
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`Confirmation email sent to ${email}`);
+    console.log(`Confirmation email sent to ${email} for ${productId}`);
   } catch (error) {
     console.error('Error sending confirmation email:', error);
   }
@@ -189,7 +203,7 @@ app.post('/api/verify-payment', (req, res) => {
       incrementSalesCount();
       if (buyer_email) {
         addBuyer(buyer_email, buyer_name);
-        sendConfirmationEmail(buyer_email, buyer_name);
+        sendConfirmationEmail(buyer_email, buyer_name, req.body.product_id);
       }
       res.json({ status: 'success', message: 'Payment verified successfully' });
     } else {

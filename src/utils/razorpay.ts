@@ -9,6 +9,7 @@ interface PaymentOptions {
   currency: string;
   name: string;
   description: string;
+  productId: string;
   image?: string;
   buyerName?: string;
   buyerEmail?: string;
@@ -78,6 +79,7 @@ export const initiateCheckout = async (options: PaymentOptions) => {
               razorpay_signature: response.razorpay_signature,
               buyer_email: options.buyerEmail,
               buyer_name: options.buyerName,
+              product_id: options.productId,
             }),
           });
 
