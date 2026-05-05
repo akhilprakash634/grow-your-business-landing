@@ -234,6 +234,50 @@ app.post('/api/register-purchase', async (req, res) => {
   }
 });
 
+const SUPPORT_FILE = path.join(DATA_DIR, 'support_requests.json');
+
+const addSupportRequest = (email, mobile) => {
+  try {
+    let requests = [];
+    if (fs.existsSync(SUPPORT_FILE)) {
+      requests = JSON.parse(fs.readFileSync(SUPPORT_FILE, 'utf8'));
+    }
+    requests.push({
+      email: email.toLowerCase().trim(),
+      mobile,
+      requestedAt: new Date().toISOString()
+    });
+    fs.writeFileSync(SUPPORT_FILE, JSON.stringify(requests, null, 2));
+  } catch (error) {
+    console.error('Error saving support request:', error);
+  }
+};
+
+// Verify purchase and log support request
+app.post('/api/request-support', (req, res) => {
+  try {
+    const { email, mobile } = req.body;
+    if (!email || !mobile) {
+      return res.status(400).json({ authorized: false, error: 'Email and mobile are required' });
+    }
+
+    const buyers = getBuyers();
+    const normalized = email.toLowerCase().trim();
+    const buyer = buyers.find(b => b.email === normalized);
+
+    if (buyer) {
+      addSupportRequest(email, mobile);
+      res.json({ authorized: true, message: 'Support request verified' });
+    } else {
+      res.status(403).json({ authorized: false, error: 'No purchase found for this email. Please ensure you use the same email used during purchase.' });
+    }
+  } catch (error) {
+    console.error('Error processing support request:', error);
+    res.status(500).json({ authorized: false, error: 'Server error' });
+  }
+});
+
+
 const PORT = process.env.PORT || 5000;
 
 // Keep-alive ping for Render
