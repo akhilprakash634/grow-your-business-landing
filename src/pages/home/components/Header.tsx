@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function Header() {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -15,12 +17,12 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: 'Services', path: '/services' },
-    { name: 'About', path: '/about' },
-    { name: 'IT Support', path: '/services/it-support' },
-    { name: 'Website Dev', path: '/services/website-development' },
-    { name: 'Digital Store', path: '/#products' },
-    { name: 'Contact', path: '/contact' },
+    { name: t('nav.services'), path: '/services' },
+    { name: t('nav.about'), path: '/about' },
+    { name: t('nav.it_support'), path: '/services/it-support' },
+    { name: t('nav.website_dev'), path: '/services/website-development' },
+    { name: t('nav.digital_store'), path: '/#products' },
+    { name: t('nav.contact'), path: '/contact' },
   ];
 
   const handleNavClick = (path: string) => {
@@ -103,7 +105,7 @@ export default function Header() {
               }`}
             >
               <i className="ri-whatsapp-fill text-lg"></i>
-              <span>Free Consultation</span>
+              <span>{t('nav.free_consultation')}</span>
             </a>
           </div>
 
@@ -149,7 +151,7 @@ export default function Header() {
                 className="w-full px-5 py-3.5 bg-emerald-500 text-white text-center text-sm font-bold rounded-lg hover:bg-emerald-600 transition-all flex items-center justify-center space-x-2"
               >
                 <i className="ri-whatsapp-fill text-lg"></i>
-                <span>Free Consultation</span>
+                <span>{t('nav.free_consultation')}</span>
               </a>
             </div>
           </div>
