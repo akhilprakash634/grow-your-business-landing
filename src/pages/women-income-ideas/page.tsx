@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useSEO, generateWebPageSchema } from '../../utils/seo';
 import { initiateCheckout } from '../../utils/razorpay';
+import { getUserCountryCode, isUserInIndia } from '../../utils/location';
 import Header from '../home/components/Header';
 import { CheckCircle2, Zap, Target, DollarSign, HelpCircle, ArrowRight, ShieldCheck, Sparkles, BookOpen, Star, Users, Clock } from 'lucide-react';
 
 export default function WomenIncomeIdeasPage() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
@@ -13,6 +16,19 @@ export default function WomenIncomeIdeasPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     
+    // Automatic language switching based on location
+    const detectLocation = async () => {
+      // Only switch if user hasn't manually set a language (stored in localStorage by i18next)
+      const savedLng = localStorage.getItem('i18nextLng');
+      if (!savedLng || (savedLng !== 'hi' && savedLng !== 'en')) {
+        const countryCode = await getUserCountryCode();
+        if (isUserInIndia(countryCode)) {
+          i18n.changeLanguage('hi');
+        }
+      }
+    };
+    detectLocation();
+
     const handleScroll = () => {
       if (window.scrollY > 600) {
         setShowSticky(true);
@@ -23,14 +39,14 @@ export default function WomenIncomeIdeasPage() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [i18n]);
 
   useSEO({
-    title: '50+ Income Making Ideas for Women | Start Your Business from Home',
-    description: 'Discover 50+ proven work-from-home and business ideas for women in Hindi and Marathi. No experience needed.',
+    title: t('women_income.title'),
+    description: t('women_income.description'),
     keywords: 'business ideas for women, work from home for ladies, make money online women, hindi business guide, marathi business guide',
     canonical: '/women-income-ideas',
-    schema: generateWebPageSchema('/women-income-ideas', 'Income Making Ideas for Women', 'Proven business and work-from-home ideas for women in Hindi and Marathi.')
+    schema: generateWebPageSchema('/women-income-ideas', t('women_income.title'), t('women_income.description'))
   });
 
   const handleBuyNow = () => {
@@ -38,8 +54,8 @@ export default function WomenIncomeIdeasPage() {
     initiateCheckout({
       amount: 9900, // ₹99 in paise
       currency: 'INR',
-      name: 'Income Making Ideas for Women',
-      description: '50+ Ideas (Hindi/Marathi)',
+      name: t('women_income.title'),
+      description: t('women_income.hero_subtitle'),
       productId: 'women-income-ideas',
       onSuccess: (response) => {
         navigate(`/thank-you?payment_id=${response.razorpay_payment_id}&product_id=women-income-ideas`);
@@ -49,12 +65,12 @@ export default function WomenIncomeIdeasPage() {
   };
 
   const benefits = [
-    { title: '50+ Proven Business Ideas', description: 'Real ideas you can start from home with zero investment.' },
-    { title: 'Hindi & Marathi Language', description: 'Easy to understand guides in your own language.' },
-    { title: 'Step-by-step Setup Guide', description: 'How to start, find customers, and manage your time.' },
-    { title: 'Zero Investment Options', description: 'Many ideas that require no money to start.' },
-    { title: 'Flexible Working Hours', description: 'Balance your home and work easily.' },
-    { title: 'Instant Digital Access', description: 'Get immediate access to the PDF after payment.' },
+    { title: t('women_income.benefits_0_title'), description: t('women_income.benefits_0_desc') },
+    { title: t('women_income.benefits_1_title'), description: t('women_income.benefits_1_desc') },
+    { title: t('women_income.benefits_2_title'), description: t('women_income.benefits_2_desc') },
+    { title: t('women_income.benefits_3_title'), description: t('women_income.benefits_3_desc') },
+    { title: t('women_income.benefits_4_title'), description: t('women_income.benefits_4_desc') },
+    { title: t('women_income.benefits_5_title'), description: t('women_income.benefits_5_desc') },
   ];
 
   return (
@@ -69,14 +85,14 @@ export default function WomenIncomeIdeasPage() {
           <div className="space-y-6 lg:space-y-8 lg:col-span-7">
             <div className="flex flex-wrap gap-2">
               <div className="inline-flex items-center gap-2 bg-pink-500/10 text-pink-400 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider border border-pink-500/20">
-                <Sparkles className="w-3 h-3" /> SPECIAL OFFER: ₹99 ONLY
+                <Sparkles className="w-3 h-3" /> {t('women_income.hero_badge')}
               </div>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
-              50+ <span className="text-pink-400">Income Making Ideas</span> for Women
+              {t('women_income.hero_title')}
             </h1>
             <p className="text-lg sm:text-xl text-gray-400 max-w-xl leading-relaxed">
-              Start your journey to financial independence today. Proven business and work-from-home ideas in Hindi & Marathi.
+              {t('women_income.hero_subtitle')}
             </p>
 
             <div className="flex flex-col gap-6 pt-2">
@@ -87,13 +103,13 @@ export default function WomenIncomeIdeasPage() {
                   className="w-full sm:w-fit bg-pink-500 text-white px-10 py-5 rounded-2xl font-black text-xl sm:text-2xl hover:bg-pink-600 transition-all flex items-center justify-center gap-3 group shadow-[0_20px_50px_rgba(236,72,153,0.4)] hover:shadow-[0_25px_60px_rgba(236,72,153,0.5)] active:scale-[0.98] relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  {isLoading ? 'Opening Checkout...' : <>Get Access Now ₹99 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
+                  {isLoading ? t('women_income.loading') : <>{t('women_income.buy_now')} <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" /></>}
                 </button>
               </div>
               
               <div className="flex items-center gap-2 text-gray-500 text-sm font-medium px-1">
                 <ShieldCheck className="w-4 h-4 text-pink-500/50" />
-                <span>Instant access after payment • Available in Hindi & Marathi • No experience needed</span>
+                <span>{t('women_income.subtext')}</span>
               </div>
             </div>
           </div>
@@ -112,7 +128,7 @@ export default function WomenIncomeIdeasPage() {
         {/* Benefits */}
         <section className="bg-white/5 py-24 px-6 border-y border-white/5">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl lg:text-4xl font-bold text-center mb-16">Everything you need to <span className="text-pink-400">start today</span></h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-center mb-16">{t('women_income.benefits_title')}</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {benefits.map((benefit, i) => (
                 <div key={i} className="p-8 rounded-2xl bg-black border border-white/10 hover:border-pink-500/50 transition-all group hover:-translate-y-1 text-left">
@@ -129,18 +145,18 @@ export default function WomenIncomeIdeasPage() {
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <h2 className="text-3xl lg:text-5xl font-bold leading-tight">Empowering Women to be <span className="text-pink-400">Independent</span></h2>
+              <h2 className="text-3xl lg:text-5xl font-bold leading-tight">{t('women_income.empower_title')}</h2>
               <p className="text-gray-400 text-lg leading-relaxed">
-                Join 500+ women who have started their small businesses using our guide. We provide the ideas, strategies, and confidence you need to succeed.
+                {t('women_income.empower_desc')}
               </p>
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-1">
                   <div className="text-3xl font-black text-white">500+</div>
-                  <div className="text-sm text-gray-500 font-bold uppercase tracking-widest">Active Learners</div>
+                  <div className="text-sm text-gray-500 font-bold uppercase tracking-widest">{t('women_income.stats_learners')}</div>
                 </div>
                 <div className="space-y-1">
                   <div className="text-3xl font-black text-white">50+</div>
-                  <div className="text-sm text-gray-500 font-bold uppercase tracking-widest">Business Ideas</div>
+                  <div className="text-sm text-gray-500 font-bold uppercase tracking-widest">{t('women_income.stats_ideas')}</div>
                 </div>
               </div>
             </div>
@@ -149,13 +165,13 @@ export default function WomenIncomeIdeasPage() {
                 {[1, 2, 3, 4, 5].map((_, i) => <Star key={i} className="w-5 h-5 fill-pink-500 text-pink-500" />)}
               </div>
               <p className="text-xl italic font-medium leading-relaxed">
-                "This guide changed my life. I started my small home catering business with just ₹500 and now I'm earning ₹15,000 every month. Thank you!"
+                {t('women_income.testimonial_text')}
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-400">S</div>
                 <div>
-                  <div className="font-bold">Sunita Patil</div>
-                  <div className="text-sm text-gray-500">Home Entrepreneur</div>
+                  <div className="font-bold">{t('women_income.testimonial_author')}</div>
+                  <div className="text-sm text-gray-500">{t('women_income.testimonial_role')}</div>
                 </div>
               </div>
             </div>
@@ -167,14 +183,14 @@ export default function WomenIncomeIdeasPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16 space-y-4">
               <HelpCircle className="w-12 h-12 text-pink-500 mx-auto" />
-              <h2 className="text-3xl lg:text-4xl font-bold">Common Questions</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold">{t('women_income.faq_title')}</h2>
             </div>
             <div className="space-y-4">
               {[
-                { q: 'Is it in Hindi and Marathi?', a: 'Yes, the guide is available in both Hindi and Marathi languages for easy understanding.' },
-                { q: 'How will I get access?', a: 'Immediately after payment, you\'ll be redirected to a page where you can download the PDF guide instantly.' },
-                { q: 'Do I need a big investment?', a: 'No, many of the 50+ ideas can be started with zero or very little investment.' },
-                { q: 'Can I do this part-time?', a: 'Absolutely! These ideas are designed to be flexible so you can manage them along with your household work.' },
+                { q: t('women_income.faq_0_q'), a: t('women_income.faq_0_a') },
+                { q: t('women_income.faq_1_q'), a: t('women_income.faq_1_a') },
+                { q: t('women_income.faq_2_q'), a: t('women_income.faq_2_a') },
+                { q: t('women_income.faq_3_q'), a: t('women_income.faq_3_a') },
               ].map((faq, i) => (
                 <div key={i} className="p-8 rounded-2xl bg-black border border-white/5 hover:border-white/10 transition-colors space-y-4 text-left">
                   <h3 className="text-xl font-bold text-pink-400">{faq.q}</h3>
@@ -193,7 +209,7 @@ export default function WomenIncomeIdeasPage() {
           disabled={isLoading}
           className="w-full bg-pink-500 text-white py-4 rounded-xl font-black text-lg shadow-[0_10px_30px_rgba(236,72,153,0.3)] active:scale-95 transition-all"
         >
-          {isLoading ? 'Loading...' : 'GET ACCESS NOW ₹99'}
+          {isLoading ? t('women_income.loading') : t('women_income.sticky_buy')}
         </button>
       </div>
 
