@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Users, ArrowRight } from 'lucide-react';
 
 // Using simple SVG icons since Lucide doesn't have WhatsApp/Telegram brand icons
 const WhatsAppIcon = () => (
@@ -16,129 +16,100 @@ const TelegramIcon = () => (
 );
 
 export default function SocialPopup() {
+  const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [hasDismissed, setHasDismissed] = useState(false);
 
   useEffect(() => {
-    // Check if user has previously dismissed the popup persistently
-    const dismissed = localStorage.getItem('socialPopupDismissedPermanent');
-    if (dismissed) {
-      setHasDismissed(true);
-      return;
-    }
-
-    // Show popup after 8 seconds (slightly faster to catch attention but not too soon)
+    // Show the floating button after 5 seconds
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 8000);
+    }, 5000);
 
-    // Escape key listener to close
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') handleDismiss();
-    };
-    window.addEventListener('keydown', handleEsc);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('keydown', handleEsc);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleDismiss = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      setHasDismissed(true);
-      // Persistent dismissal so it doesn't irritate users on every visit
-      localStorage.setItem('socialPopupDismissedPermanent', 'true');
-    }, 500); // Wait for transition
-  };
+  const toggleOpen = () => setIsOpen(!isOpen);
 
-  if (hasDismissed) return null;
+  if (!isVisible) return null;
 
   return (
-    <>
-      {/* Backdrop for closing on click outside (Mobile/Desktop) */}
+    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 pointer-events-none">
+      {/* Expanded Menu */}
       <div 
-        className={`fixed inset-0 z-[60] bg-black/20 backdrop-blur-[2px] transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={handleDismiss}
-      />
-      
-      <div
-        className={`fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 z-[70] transition-all duration-500 ease-out transform ${isVisible ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-20 scale-95 opacity-0 pointer-events-none'
-          }`}
+        className={`bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-slate-100 p-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right pointer-events-auto ${
+          isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
+        }`}
       >
-        <div className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 border border-slate-100 w-full max-w-sm md:w-80 relative overflow-hidden group">
-          {/* Decorative background accent */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all duration-500"></div>
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-500"></div>
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 pb-3 border-b border-slate-50">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+              <Users size={20} />
+            </div>
+            <div>
+              <h3 className="font-black text-slate-800 text-sm tracking-tight">Community Hub</h3>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Free Resources & Support</p>
+            </div>
+          </div>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDismiss();
-            }}
-            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all z-20 rounded-full p-2"
-            aria-label="Close"
-          >
-            <X size={20} strokeWidth={3} />
-          </button>
-
-          <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex -space-x-2">
-                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold border-2 border-white shadow-sm">
+          <div className="flex flex-col gap-2">
+            <a
+              href="https://chat.whatsapp.com/Hnv1hJpBYZcA7LvUPnBV6D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between group/btn p-3 bg-emerald-50 hover:bg-emerald-100 rounded-2xl transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-sm">
                   <WhatsAppIcon />
                 </div>
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm z-10">
+                <span className="text-sm font-bold text-slate-700">WhatsApp</span>
+              </div>
+              <ArrowRight size={16} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
+            </a>
+
+            <a
+              href="https://t.me/+nU7ZzIXV_dkyNTJl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between group/btn p-3 bg-blue-50 hover:bg-blue-100 rounded-2xl transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#2AABEE] flex items-center justify-center text-white shadow-sm">
                   <TelegramIcon />
                 </div>
+                <span className="text-sm font-bold text-slate-700">Telegram</span>
               </div>
-              <div>
-                <h3 className="font-black text-slate-800 text-lg leading-tight tracking-tight">Join Our Community</h3>
-                <div className="flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-[10px] uppercase font-black text-emerald-600 tracking-widest">Free Access</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-sm text-slate-600 mb-6 leading-relaxed font-medium">
-              Join <strong className="text-slate-900">5,000+ entrepreneurs</strong> getting exclusive strategies and free high-value resources.
-            </p>
-
-            <div className="flex flex-col gap-3">
-              <a
-                href="https://chat.whatsapp.com/Hnv1hJpBYZcA7LvUPnBV6D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 w-full py-3.5 px-6 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl text-sm font-black shadow-lg shadow-emerald-500/30 transition-all active:scale-95 group/btn"
-              >
-                <WhatsAppIcon />
-                Join WhatsApp Group
-              </a>
-              <a
-                href="https://t.me/+nU7ZzIXV_dkyNTJl"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 w-full py-3.5 px-6 bg-[#2AABEE] hover:bg-[#2298D6] text-white rounded-2xl text-sm font-black shadow-lg shadow-[#2AABEE]/30 transition-all active:scale-95 group/btn"
-              >
-                <TelegramIcon />
-                Join Telegram Channel
-              </a>
-            </div>
-            
-            <button 
-              onClick={handleDismiss}
-              className="w-full mt-4 text-xs text-slate-400 font-bold uppercase tracking-widest hover:text-slate-600 transition-colors"
-            >
-              No thanks, maybe later
-            </button>
+              <ArrowRight size={16} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
+            </a>
           </div>
         </div>
       </div>
-    </>
+
+      {/* Floating Trigger Button */}
+      <div className="flex items-center gap-3 pointer-events-auto">
+        <div className={`bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 transition-all duration-500 ${
+          isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'
+        }`}>
+          <p className="text-xs font-black text-slate-800 flex items-center gap-2">
+            <span className="flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Join Our Community
+          </p>
+        </div>
+
+        <button
+          onClick={toggleOpen}
+          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 active:scale-90 ${
+            isOpen 
+              ? 'bg-slate-800 text-white rotate-90 hover:bg-slate-900' 
+              : 'bg-emerald-500 text-white hover:bg-emerald-600'
+          }`}
+        >
+          {isOpen ? <X size={24} strokeWidth={3} /> : <Users size={24} strokeWidth={2.5} />}
+        </button>
+      </div>
+    </div>
   );
 }
