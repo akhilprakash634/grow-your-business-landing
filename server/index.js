@@ -6,13 +6,17 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const { createClient } = require('@sanity/client');
-require('dotenv').config();
+// Force load the .env from the same directory as index.js and override existing env vars
+require('dotenv').config({ 
+  path: path.join(__dirname, '.env'),
+  override: true 
+});
 
 const sanityToken = (process.env.SANITY_API_TOKEN || '').trim().replace(/^["']|["']$/g, '');
-if (!sanityToken) {
-  console.warn('\x1b[33m⚠ SANITY_API_TOKEN is not defined in .env\x1b[0m');
+if (!sanityToken || sanityToken.startsWith('your_')) {
+  console.warn('\x1b[31m✘ SANITY_API_TOKEN is invalid or placeholder (starts with: ' + (sanityToken.substring(0, 5) || 'empty') + ')\x1b[0m');
 } else {
-  console.log('\x1b[32m✓ SANITY_API_TOKEN found (starts with: ' + sanityToken.substring(0, 5) + '...)\x1b[0m');
+  console.log('\x1b[32m✓ SANITY_API_TOKEN loaded successfully (length: ' + sanityToken.length + ', starts with: ' + sanityToken.substring(0, 5) + '...)\x1b[0m');
 }
 
 const sanityClient = createClient({
