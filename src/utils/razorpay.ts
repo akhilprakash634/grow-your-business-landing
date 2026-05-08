@@ -80,6 +80,7 @@ export const initiateCheckout = async (options: PaymentOptions) => {
               buyer_email: options.buyerEmail,
               buyer_name: options.buyerName,
               product_id: options.productId,
+              amount: options.amount,
             }),
           });
 

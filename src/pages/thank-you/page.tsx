@@ -45,11 +45,43 @@ export default function ThankYouPage() {
     const email = localStorage.getItem('buyer_email');
     const registeredPayments = JSON.parse(localStorage.getItem('registered_payments') || '[]');
     
-    if (email && (!paymentId || registeredPayments.includes(paymentId))) {
+    if (email && paymentId && !registeredPayments.includes(paymentId)) {
+      // Auto-register if we have email from checkout modal
+      setBuyerEmail(email);
+      handleAutoRegister(email, paymentId, productId);
+    } else if (email && (!paymentId || registeredPayments.includes(paymentId))) {
       setBuyerEmail(email);
       setIsSuccess(true);
     }
   }, [productId, paymentId]);
+
+  const handleAutoRegister = async (email: string, pId: string, prodId: string | null) => {
+    setIsRegistering(true);
+    try {
+      const response = await fetch(`${API_URL}/api/register-purchase`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          payment_id: pId,
+          email: email.toLowerCase().trim(),
+          productId: prodId
+        }),
+      });
+
+      if (response.ok) {
+        const registeredPayments = JSON.parse(localStorage.getItem('registered_payments') || '[]');
+        if (!registeredPayments.includes(pId)) {
+          registeredPayments.push(pId);
+          localStorage.setItem('registered_payments', JSON.stringify(registeredPayments));
+        }
+        setIsSuccess(true);
+      }
+    } catch (err) {
+      console.error('Auto-registration failed:', err);
+    } finally {
+      setIsRegistering(false);
+    }
+  };
 
   useSEO({
     title: 'Payment Successful | Grow Your Business',
