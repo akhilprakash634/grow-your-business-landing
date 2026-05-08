@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ChevronRight, Layout, Search, Sparkles } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Layout, Search, Sparkles, X, Eye, ArrowRight } from 'lucide-react';
 import { fetchProducts } from '../../lib/sanity';
 import Header from '../home/components/Header';
 import Footer from '../home/components/Footer';
@@ -27,6 +27,7 @@ export default function ProductsPage() {
   });
   const [products, setProducts] = useState<SanityProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [previewProduct, setPreviewProduct] = useState<SanityProduct | null>(null);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -78,7 +79,7 @@ export default function ProductsPage() {
                   products.map((product) => (
                     <div 
                       key={product._id}
-                      className="group bg-gray-900/40 border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all duration-500 flex flex-col hover:shadow-2xl hover:shadow-emerald-500/5"
+                      className="group bg-gray-900/40 border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all duration-500 flex flex-col hover:shadow-2xl hover:shadow-emerald-500/5 relative"
                     >
                       {/* Product Image Container */}
                       <div className="aspect-[4/3] bg-gray-800 relative overflow-hidden">
@@ -93,7 +94,18 @@ export default function ProductsPage() {
                             <Layout size={64} />
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent opacity-60"></div>
+                        
+                        {/* Overlay with Quick Preview Button */}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                          <button 
+                            onClick={() => setPreviewProduct(product)}
+                            className="bg-white text-black px-6 py-3 rounded-full font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 active:scale-95 shadow-xl"
+                          >
+                            <Eye size={18} /> Quick Preview
+                          </button>
+                        </div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent opacity-60 pointer-events-none"></div>
                         
                         {product.tag && (
                           <span className="absolute top-4 left-4 bg-emerald-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
@@ -150,6 +162,84 @@ export default function ProductsPage() {
           </div>
         </section>
       </main>
+
+      {/* Quick Preview Modal */}
+      {previewProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-md" 
+            onClick={() => setPreviewProduct(null)}
+          ></div>
+          
+          <div className="relative bg-gray-900 border border-white/10 rounded-[2.5rem] w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col md:flex-row animate-in fade-in zoom-in duration-300">
+            <button 
+              onClick={() => setPreviewProduct(null)}
+              className="absolute top-6 right-6 z-10 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition-colors"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Modal Image */}
+            <div className="w-full md:w-1/2 aspect-square md:aspect-auto bg-gray-800 relative">
+              {previewProduct.imageUrl ? (
+                <img 
+                  src={previewProduct.imageUrl} 
+                  alt={previewProduct.title} 
+                  className="w-full h-full object-cover" 
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-emerald-400/20">
+                  <Layout size={80} />
+                </div>
+              )}
+              {previewProduct.tag && (
+                <span className="absolute top-6 left-6 bg-emerald-500 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">
+                  {previewProduct.tag}
+                </span>
+              )}
+            </div>
+
+            {/* Modal Info */}
+            <div className="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center space-y-8">
+              <div className="space-y-4">
+                <span className="text-emerald-400 text-sm font-black uppercase tracking-[0.2em]">
+                  {previewProduct.type || 'Digital Asset'}
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight">
+                  {previewProduct.title}
+                </h2>
+                <div className="flex items-center gap-4">
+                  <span className="text-3xl font-black text-white">₹{previewProduct.offerPrice}</span>
+                  <span className="text-lg text-gray-500 font-bold uppercase line-through">₹{previewProduct.actualPrice}</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-gray-400 text-lg leading-relaxed">
+                  {previewProduct.description}
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-3 text-sm text-gray-300">
+                    <Sparkles size={16} className="text-emerald-500" /> Instant Access after purchase
+                  </li>
+                  <li className="flex items-center gap-3 text-sm text-gray-300">
+                    <Sparkles size={16} className="text-emerald-500" /> Lifetime Updates included
+                  </li>
+                </ul>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Link 
+                  to={`/${previewProduct.slug}`}
+                  className="flex-1 bg-emerald-500 text-white py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all text-center flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95"
+                >
+                  View Full Details <ArrowRight size={20} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
