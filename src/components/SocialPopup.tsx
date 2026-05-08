@@ -20,10 +20,23 @@ export default function SocialPopup() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Show the floating button after 5 seconds
+    const isMobile = window.innerWidth < 768;
+    
+    // Check if we should show it at all on this mobile visit (60% chance)
+    if (isMobile && Math.random() > 0.6) {
+      return;
+    }
+
+    // Show the floating button
+    // Mobile: Random delay between 15-40 seconds for a more "organic" feel
+    // Desktop: Fixed 5 seconds for immediate engagement
+    const delay = isMobile 
+      ? Math.floor(Math.random() * (40000 - 15000 + 1)) + 15000 
+      : 5000;
+
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 5000);
+    }, delay);
 
     return () => clearTimeout(timer);
   }, []);
