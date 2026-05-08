@@ -59,5 +59,12 @@ export const product = defineType({
       type: 'url',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'previewImages',
+      title: 'Preview Images (PDF Samples)',
+      type: 'array',
+      of: [{ type: 'image' }],
+      description: 'Upload screenshots of the first few pages of the PDF for the quick preview modal.'
+    }),
   ],
 })
