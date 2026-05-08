@@ -7,6 +7,7 @@ export default function AboutPage() {
     title: 'About Grow Your Business | Leading IT Agency in Kerala & UAE',
     description: 'Learn about our mission to digitize local businesses in Kerala and UAE. Over 500+ successful projects delivered.',
     canonical: '/about',
+    schema: generateLocalBusinessSchema()
   });
 
   return (
@@ -24,9 +25,6 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-        <script type="application/ld+json">
-          {JSON.stringify(generateLocalBusinessSchema())}
-        </script>
       </main>
       <Footer />
     </div>

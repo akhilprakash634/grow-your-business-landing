@@ -5,7 +5,6 @@ import Services from './components/Services';
 import Pricing from './components/Pricing';
 import SocialProof from './components/SocialProof';
 import HowItWorks from './components/HowItWorks';
-import Products from './components/Products';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { useSEO, generateLocalBusinessSchema, generateServiceSchema, generateOrganizationSchema } from '../../utils/seo';
@@ -37,7 +36,6 @@ export default function Home() {
         <Pricing />
         <SocialProof />
         <HowItWorks />
-        <Products />
         <Contact />
       </main>
       <Footer />

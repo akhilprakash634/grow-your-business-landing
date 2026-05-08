@@ -266,3 +266,38 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
     }))
   };
 }
+
+export function generateProductSchema(product: {
+  title: string;
+  description: string;
+  imageUrl: string;
+  offerPrice: number;
+  actualPrice?: number;
+  slug: string;
+}) {
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://growyourbusiness.today';
+  const cleanTitle = product.title.replace(/-/g, ' ');
+  
+  return {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    'name': cleanTitle,
+    'image': product.imageUrl,
+    'description': product.description,
+    'brand': {
+      '@type': 'Brand',
+      'name': 'Grow Your Business'
+    },
+    'offers': {
+      '@type': 'Offer',
+      'url': `${siteUrl}/products/${product.slug}`,
+      'priceCurrency': 'INR',
+      'price': product.offerPrice,
+      'availability': 'https://schema.org/InStock',
+      'seller': {
+        '@type': 'Organization',
+        'name': 'Grow Your Business'
+      }
+    }
+  };
+}

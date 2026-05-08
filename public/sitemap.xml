@@ -1,74 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Pages -->
   <url>
     <loc>https://growyourbusiness.today/</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://growyourbusiness.today/home</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://growyourbusiness.today/products</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://growyourbusiness.today/services</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://growyourbusiness.today/services/it-support</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://growyourbusiness.today/services/website-development</loc>
-    <lastmod>2025-01-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://growyourbusiness.today/about</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/contact</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/resources</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Campaigns -->
+  <url>
+    <loc>https://growyourbusiness.today/women-income-ideas</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Products -->
+  <url>
+    <loc>https://growyourbusiness.today/income-making-ideas-for-women-hindi-marathi</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://growyourbusiness.today/first-freelance-client-system</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://growyourbusiness.today/e-book-market-analysis_-state-specific-winning-ideas-for-india</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://growyourbusiness.today/ai-powerd-income-44-prompt-e-book</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Posts -->
   <url>
     <loc>https://growyourbusiness.today/resources/ai-business-growth-kerala</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/resources/google-business-profile-tips</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/resources/whatsapp-marketing-guide-uae</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/resources/fast-website-benefits-kerala</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://growyourbusiness.today/resources/choosing-right-it-partner</loc>
-    <lastmod>2025-01-20</lastmod>
+    <lastmod>2026-05-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

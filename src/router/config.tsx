@@ -16,6 +16,8 @@ import FirstClientPage from "../pages/first-client/page";
 import WomenIncomeIdeasPage from "../pages/women-income-ideas/page";
 import ThankYouPage from "../pages/thank-you/page";
 import ProductAccessPage from "../pages/product-access/page";
+import ProductDetailPage from "../pages/product-detail/page";
+import ProductsPage from "../pages/products/page";
 
 const routes: RouteObject[] = [
   {
@@ -81,6 +83,14 @@ const routes: RouteObject[] = [
   {
     path: "/product-access",
     element: <ProductAccessPage />,
+  },
+  {
+    path: "/products",
+    element: <ProductsPage />,
+  },
+  {
+    path: "/:slug",
+    element: <ProductDetailPage />,
   },
   {
     path: "*",

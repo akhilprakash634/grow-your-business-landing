@@ -3,16 +3,17 @@ import Footer from '../home/components/Footer';
 import { useSEO, generateWebPageSchema, generateServiceSchema } from '../../utils/seo';
 
 export default function ServicesPage() {
-  useSEO({
-    title: 'Professional IT Services & Web Design | Grow Your Business',
-    description: 'Comprehensive digital services including custom website development, WhatsApp marketing systems, and Google Business Profile optimization for Kerala and UAE businesses.',
-    canonical: '/services',
-  });
-
   const schemas = [
     generateWebPageSchema('/services', 'Our Services', 'Comprehensive digital services for business growth'),
     generateServiceSchema()
   ];
+
+  useSEO({
+    title: 'Professional IT Services & Web Design | Grow Your Business',
+    description: 'Comprehensive digital services including custom website development, WhatsApp marketing systems, and Google Business Profile optimization for Kerala and UAE businesses.',
+    canonical: '/services',
+    schema: schemas
+  });
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-50 flex flex-col font-sans">
@@ -44,10 +45,6 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
-        
-        <script type="application/ld+json">
-          {JSON.stringify(schemas)}
-        </script>
       </main>
       <Footer />
     </div>

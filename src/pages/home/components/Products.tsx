@@ -1,44 +1,88 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, ChevronRight, FileText, Layout, ArrowRight } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Layout, ArrowRight } from 'lucide-react';
+import { fetchProducts } from '../../../lib/sanity';
 
-const products = [
-  {
-    id: 'first-client',
-    name: 'First Freelance Client System',
-    description: 'The exact step-by-step system for beginners to land their first high-paying client in 72 hours.',
-    price: '₹199',
-    oldPrice: '₹299',
-    type: 'Digital System (PDF)',
-    link: '/first-client',
-    tag: 'Bestseller',
-    image: '/product-hero.png'
-  },
-  {
-    id: 'women-income-ideas',
-    name: 'Income Making Ideas for Women (Hindi/Marathi)',
-    description: '50+ proven work-from-home and business ideas for women in Hindi and Marathi. Start with zero investment.',
-    price: '₹99',
-    oldPrice: '₹199',
-    type: 'Digital Guide (PDF)',
-    link: '/women-income-ideas',
-    tag: 'New',
-    image: '/women-income.png'
-  },
-  {
-    id: 'agency-templates',
-    name: 'Agency Website Templates',
-    description: 'High-converting website templates designed specifically for service-based businesses and agencies.',
-    price: 'Coming Soon',
-    type: 'Code Bundle',
-    link: '#',
-    tag: 'Upcoming'
-  }
-];
+interface SanityProduct {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  downloadLink: string;
+  type?: string;
+  tag?: string;
+  oldPrice?: string;
+}
 
 export default function Products() {
+  const [products, setProducts] = useState<SanityProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const data = await fetchProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products from Sanity:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="products" className="py-24 bg-gray-950">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-4 w-32 bg-gray-800 rounded mb-4"></div>
+            <div className="h-8 w-64 bg-gray-800 rounded mb-4"></div>
+            <div className="h-4 w-96 bg-gray-800 rounded mb-16"></div>
+            <div className="grid gap-6 w-full">
+              {[1, 2].map((i) => (
+                <div key={i} className="h-40 bg-gray-800 rounded-2xl w-full"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Fallback products if Sanity is empty
+  const displayProducts = products.length > 0 ? products : [
+    {
+      _id: 'first-client',
+      title: 'First Freelance Client System',
+      slug: 'first-client',
+      description: 'The exact step-by-step system for beginners to land their first high-paying client in 72 hours.',
+      price: 199,
+      oldPrice: '₹299',
+      imageUrl: '/product-hero.png',
+      downloadLink: '#',
+      type: 'Digital System (PDF)',
+      tag: 'Bestseller'
+    },
+    {
+      _id: 'women-income-ideas',
+      title: 'Income Making Ideas for Women (Hindi/Marathi)',
+      slug: 'women-income-ideas',
+      description: '50+ proven work-from-home and business ideas for women in Hindi and Marathi. Start with zero investment.',
+      price: 99,
+      oldPrice: '₹199',
+      imageUrl: '/women-income.png',
+      downloadLink: '#',
+      type: 'Digital Guide (PDF)',
+      tag: 'New'
+    }
+  ];
+
   return (
     <section id="products" className="py-24 bg-gray-950 relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
       
       <div className="max-w-5xl mx-auto px-6 relative z-10">
@@ -55,16 +99,15 @@ export default function Products() {
         </div>
 
         <div className="grid gap-6">
-          {products.map((product) => (
+          {displayProducts.map((product) => (
             <div 
-              key={product.id}
+              key={product._id}
               className="group bg-gray-900/40 border border-white/5 rounded-2xl p-4 md:p-6 hover:bg-gray-900 hover:border-emerald-500/30 transition-all duration-300 relative"
             >
               <div className="flex flex-col md:flex-row gap-6 items-center">
-                {/* Product Image - Smaller and Responsive */}
                 <div className="w-full md:w-32 lg:w-40 aspect-square bg-emerald-500/10 rounded-xl overflow-hidden flex-shrink-0 group-hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] transition-all">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
+                  {product.imageUrl ? (
+                    <img src={product.imageUrl} alt={product.title} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-emerald-400">
                       <Layout className="w-8 h-8" />
@@ -72,23 +115,22 @@ export default function Products() {
                   )}
                 </div>
 
-                {/* Product Content */}
                 <div className="flex-1 space-y-3 text-center md:text-left">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                     <div className="space-y-1">
                       <div className="flex items-center justify-center md:justify-start gap-3">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{product.type}</span>
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{product.type || 'Digital Product'}</span>
                         {product.tag && (
                           <span className="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
                             {product.tag}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">{product.name}</h3>
+                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">{product.title}</h3>
                     </div>
                     
                     <div className="flex items-baseline justify-center md:justify-end gap-2">
-                      <span className="text-2xl font-black text-white">{product.price}</span>
+                      <span className="text-2xl font-black text-white">₹{product.price}</span>
                       {product.oldPrice && (
                         <span className="text-gray-500 line-through text-xs font-medium">{product.oldPrice}</span>
                       )}
@@ -101,14 +143,10 @@ export default function Products() {
 
                   <div className="pt-2 flex justify-center md:justify-start">
                     <Link 
-                      to={product.link}
-                      className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold text-sm transition-all ${
-                        product.link === '#' 
-                        ? 'bg-white/5 text-white/20 cursor-not-allowed'
-                        : 'bg-emerald-500 text-white hover:bg-emerald-600 hover:translate-x-1 active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.15)]'
-                      }`}
+                      to={`/${product.slug}`}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold text-sm transition-all bg-emerald-500 text-white hover:bg-emerald-600 hover:translate-x-1 active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.15)]"
                     >
-                      {product.link === '#' ? 'Coming Soon' : 'Get Instant Access'} <ChevronRight className="w-4 h-4" />
+                      Get Instant Access <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>
@@ -118,9 +156,9 @@ export default function Products() {
         </div>
 
         <div className="mt-12 text-center">
-          <button className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-400 transition-colors text-sm font-semibold group">
+          <Link to="/products" className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-400 transition-colors text-sm font-semibold group">
             View All Resources <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>
