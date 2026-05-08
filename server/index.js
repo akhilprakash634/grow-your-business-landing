@@ -16,17 +16,6 @@ const sanityClient = createClient({
   token: process.env.SANITY_API_TOKEN,
 });
 
-console.log('--- Sanity Config Check ---');
-console.log('Project ID:', '5n8h847y');
-console.log('Dataset:', 'production');
-console.log('Token Loaded:', !!process.env.SANITY_API_TOKEN);
-if (process.env.SANITY_API_TOKEN) {
-  console.log('Token Prefix:', process.env.SANITY_API_TOKEN.substring(0, 5) + '...');
-} else {
-  console.error('ERROR: SANITY_API_TOKEN is not defined in .env');
-}
-console.log('---------------------------');
-
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const SALES_FILE = path.join(DATA_DIR, 'sales.json');
 const BUYERS_FILE = path.join(DATA_DIR, 'authorized_emails.json');

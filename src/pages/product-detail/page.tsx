@@ -228,11 +228,11 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-gray-950 text-gray-50 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
       <Header />
       
-      <main className="flex-1 pt-16 md:pt-24 pb-12 md:pb-20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto space-y-12 md:space-y-20">
+      <main className="flex-1 pt-20 md:pt-24 pb-12 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-10 md:space-y-20">
           {/* Breadcrumb & Top Section */}
           <div>
-            <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-emerald-400 transition-colors mb-8 group">
+            <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-emerald-400 transition-colors mb-6 md:mb-8 group">
               <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Store
             </Link>
 
@@ -320,7 +320,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Right Side: Persuasive Landing Page Flow */}
-              <div className="lg:col-span-7 space-y-12 md:space-y-20">
+              <div className="lg:col-span-7 space-y-10 md:space-y-16">
                 {/* 1. Hero / Hook */}
                 <div className="space-y-6">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-widest">
