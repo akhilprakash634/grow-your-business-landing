@@ -8,13 +8,22 @@ const nodemailer = require('nodemailer');
 const { createClient } = require('@sanity/client');
 require('dotenv').config();
 
+const sanityToken = (process.env.SANITY_API_TOKEN || '').trim().replace(/^["']|["']$/g, '');
+if (!sanityToken) {
+  console.warn('\x1b[33m⚠ SANITY_API_TOKEN is not defined in .env\x1b[0m');
+} else {
+  console.log('\x1b[32m✓ SANITY_API_TOKEN found (starts with: ' + sanityToken.substring(0, 5) + '...)\x1b[0m');
+}
+
 const sanityClient = createClient({
   projectId: '5n8h847y',
   dataset: 'production',
   useCdn: false,
   apiVersion: '2024-05-08',
-  token: process.env.SANITY_API_TOKEN,
+  token: sanityToken,
 });
+
+console.log('\x1b[32m✓ Sanity client initialized\x1b[0m');
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const SALES_FILE = path.join(DATA_DIR, 'sales.json');
@@ -133,15 +142,26 @@ const sendConfirmationEmail = async (email, name, productId) => {
           <p>Thank you for purchasing the <strong>${productData.title}</strong>.</p>
           <p>We've unlocked everything for you. Your journey starts today.</p>
    
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
+            <h3 style="margin-top: 0; color: #10b981;">1. Download Your Product:</h3>
             <p>You can access your complete PDF playbook via our secure OneDrive link here:</p>
             <a href="${productData.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+          </div>
+
+          <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2563eb;">
+            <h3 style="margin-top: 0; color: #2563eb;">2. Join Our Community:</h3>
+            <p>Get instant support, updates, and network with 5,000+ entrepreneurs:</p>
+            <div style="margin-top: 15px;">
+              <a href="https://chat.whatsapp.com/Hnv1hJpBYZcA7LvUPnBV6D" style="display: inline-block; background-color: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-right: 10px; margin-bottom: 10px;">Join WhatsApp Group</a>
+              <a href="https://t.me/+nU7ZzIXV_dkyNTJl" style="display: inline-block; background-color: #0088cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-bottom: 10px;">Join Telegram Channel</a>
+            </div>
           </div>
    
           <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
           
           <p>To your success,<br/><strong>The Grow Your Business Team</strong></p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="font-size: 12px; color: #999;">&copy; ${new Date().getFullYear()} Grow Your Business. All rights reserved.</p>
         </div>
       `
     };
