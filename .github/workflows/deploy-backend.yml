@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     steps:
       - name: Checkout Code
@@ -25,7 +25,7 @@ jobs:
           target: "/var/www/html/paymentgateway"
 
       - name: Install Dependencies and Restart PM2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master 
         with:
           host: 43.205.229.25
           username: ubuntu
@@ -42,4 +42,4 @@ jobs:
             else
               pm2 start index.js --name "gyb-backend"
             fi
-            pm2 save
+            pm2 save 
