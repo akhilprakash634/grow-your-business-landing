@@ -74,7 +74,7 @@ export default function ProductDetailPage() {
     const getProductData = async () => {
       try {
         const productData = await client.fetch(
-          `*[_type == "product" && slug.current == $slug][0]{
+          `*[_type == "product" && slug.current == $slug && disabled != true][0]{
             _id,
             title,
             description,
