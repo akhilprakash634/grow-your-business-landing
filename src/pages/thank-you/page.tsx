@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSEO } from '../../utils/seo';
+import { client } from '../../lib/sanity';
 import { CheckCircle2, Unlock, Mail, Download, Loader2, ArrowRight, Headphones } from 'lucide-react';
 import SupportModal from '../home/components/SupportModal';
 
@@ -15,30 +16,40 @@ export default function ThankYouPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [productData, setProductData] = useState<{ title: string; downloadLink: string } | null>(null);
   
   const paymentId = searchParams.get('payment_id');
-  const productId = searchParams.get('product_id') || 'first-client';
-
-  const products = {
-    'first-client': {
-      name: 'First Freelance Client System',
-      link: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0'
-    },
-    'women-income-ideas': {
-      name: 'Income Making Ideas for Women',
-      link: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQA3xstO1F2QQ5MJln5pbsWjATn7PiEth5ZIi-qeIHsC5ZE?e=Sw94mO'
-    }
-  };
-
-  const product = products[productId as keyof typeof products] || products['first-client'];
+  const productId = searchParams.get('product_id');
 
   useEffect(() => {
+    async function fetchProduct() {
+      if (!productId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const data = await client.fetch(
+          `*[_id == $id || _id == "drafts." + $id][0]{ title, downloadLink }`,
+          { id: productId }
+        );
+        setProductData(data);
+      } catch (err) {
+        console.error('Error fetching product for thank you page:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProduct();
+
     const email = localStorage.getItem('buyer_email');
-    if (email) {
+    const registeredPayments = JSON.parse(localStorage.getItem('registered_payments') || '[]');
+    
+    if (email && (!paymentId || registeredPayments.includes(paymentId))) {
       setBuyerEmail(email);
       setIsSuccess(true);
     }
-  }, []);
+  }, [productId, paymentId]);
 
   useSEO({
     title: 'Payment Successful | Grow Your Business',
@@ -53,6 +64,11 @@ export default function ThankYouPage() {
       return;
     }
 
+    if (!productId) {
+      setError('Product information missing. Please contact support.');
+      return;
+    }
+
     setIsRegistering(true);
     setError('');
 
@@ -62,11 +78,19 @@ export default function ThankYouPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           payment_id: paymentId || 'manual_entry',
-          email: inputEmail.toLowerCase().trim()
+          email: inputEmail.toLowerCase().trim(),
+          productId: productId
         }),
       });
 
       if (response.ok) {
+        // Save to registered payments to prevent re-asking for this specific payment
+        const registeredPayments = JSON.parse(localStorage.getItem('registered_payments') || '[]');
+        if (paymentId && !registeredPayments.includes(paymentId)) {
+          registeredPayments.push(paymentId);
+          localStorage.setItem('registered_payments', JSON.stringify(registeredPayments));
+        }
+
         localStorage.setItem('buyer_email', inputEmail.toLowerCase().trim());
         setBuyerEmail(inputEmail.toLowerCase().trim());
         setIsSuccess(true);
@@ -81,6 +105,14 @@ export default function ThankYouPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-emerald-500 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-6 font-sans">
       <div className="max-w-xl w-full text-center space-y-8 animate-in fade-in zoom-in duration-700">
@@ -92,7 +124,7 @@ export default function ThankYouPage() {
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Payment Successful!</h1>
           <p className="text-gray-400">
-            Thank you for purchasing <strong>{product.name}</strong>.
+            Thank you for purchasing <strong>{productData?.title || 'your product'}</strong>.
           </p>
         </div>
 
@@ -149,14 +181,20 @@ export default function ThankYouPage() {
             </div>
 
             <div className="space-y-4">
-              <a
-                href={product.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
-              >
-                <Download className="w-6 h-6" /> DOWNLOAD PDF NOW
-              </a>
+              {productData?.downloadLink ? (
+                <a
+                  href={productData.downloadLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
+                >
+                  <Download className="w-6 h-6" /> DOWNLOAD PDF NOW
+                </a>
+              ) : (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                  Download link not found. Please contact support below.
+                </div>
+              )}
               
               <button 
                 onClick={() => navigate('/product-access')}

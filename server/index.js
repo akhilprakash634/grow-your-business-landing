@@ -101,53 +101,53 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const PRODUCTS = {
-  'first-client': {
-    name: 'First Freelance Client System',
-    downloadLink: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQC-aJwdaaG9SZTnxvoHF0OvAVoJ5uv-lrqAiLA9cjJ4G5E?e=jiW0I0',
-    subject: 'Welcome to the First Freelance Client System! 🎉'
-  },
-  'women-income-ideas': {
-    name: 'Income Making Ideas for Women (Hindi/Marathi)',
-    downloadLink: 'https://1drv.ms/b/c/3aac4d58cd15c559/IQA3xstO1F2QQ5MJln5pbsWjATn7PiEth5ZIi-qeIHsC5ZE?e=Sw94mO',
-    subject: 'Welcome to Income Making Ideas for Women! 🎉'
-  }
-};
 
-const sendConfirmationEmail = async (email, name, productId = 'first-client') => {
+const sendConfirmationEmail = async (email, name, productId) => {
   if (!process.env.SMTP_PASSWORD) {
     console.log('Skipping email send: SMTP_PASSWORD not configured in .env');
     return;
   }
   
-  const product = PRODUCTS[productId] || PRODUCTS['first-client'];
-  const firstName = name ? name.split(' ')[0] : 'Freelancer';
-  const mailOptions = {
-    from: `"Grow Your Business" <${process.env.SMTP_EMAIL}>`,
-    to: email,
-    subject: product.subject,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
-        <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
-        <p>Thank you for purchasing the <strong>${product.name}</strong>.</p>
-        <p>We've unlocked everything for you. Your journey starts today.</p>
- 
-        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
-          <p>You can access your complete PDF playbook via our secure OneDrive link here:</p>
-          <a href="${product.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
-        </div>
- 
-        <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
-        
-        <p>To your success,<br/><strong>The Grow Your Business Team</strong></p>
-      </div>
-    `
-  };
- 
   try {
+    // Fetch product details from Sanity
+    const query = `*[_id == $productId || _id == "drafts." + $productId][0]{
+      title,
+      "downloadLink": downloadLink
+    }`;
+    const productData = await sanityClient.fetch(query, { productId });
+
+    if (!productData) {
+      console.error(`Product not found in Sanity for ID: ${productId}`);
+      // Fallback to a default message if product is missing
+      return;
+    }
+
+    const firstName = name ? name.split(' ')[0] : 'Learner';
+    const mailOptions = {
+      from: `"Grow Your Business" <${process.env.SMTP_EMAIL}>`,
+      to: email,
+      subject: `Welcome to ${productData.title}! 🎉`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+          <h2 style="color: #10b981;">Welcome, ${firstName}! 🎉</h2>
+          <p>Thank you for purchasing the <strong>${productData.title}</strong>.</p>
+          <p>We've unlocked everything for you. Your journey starts today.</p>
+   
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #10b981;">Download Your Product:</h3>
+            <p>You can access your complete PDF playbook via our secure OneDrive link here:</p>
+            <a href="${productData.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+          </div>
+   
+          <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
+          
+          <p>To your success,<br/><strong>The Grow Your Business Team</strong></p>
+        </div>
+      `
+    };
+   
     await transporter.sendMail(mailOptions);
-    console.log(`Confirmation email sent to ${email} for ${productId}`);
+    console.log(`Confirmation email sent to ${email} for product ${productData.title}`);
   } catch (error) {
     console.error('Error sending confirmation email:', error);
   }
@@ -274,13 +274,13 @@ app.post('/api/check-access', (req, res) => {
 // Register buyer after payment (for post-payment collection)
 app.post('/api/register-purchase', async (req, res) => {
   try {
-    const { payment_id, email, name } = req.body;
-    if (!payment_id || !email) {
-      return res.status(400).json({ error: 'Payment ID and email are required' });
+    const { payment_id, email, name, productId } = req.body;
+    if (!payment_id || !email || !productId) {
+      return res.status(400).json({ error: 'Payment ID, email, and Product ID are required' });
     }
     
     addBuyer(email, name || 'Learner');
-    await sendConfirmationEmail(email, name || 'Learner');
+    await sendConfirmationEmail(email, name || 'Learner', productId);
     
     res.json({ status: 'success', message: 'Purchase registered successfully' });
   } catch (error) {

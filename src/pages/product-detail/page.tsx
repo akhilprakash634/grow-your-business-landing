@@ -4,6 +4,7 @@ import { client } from '../../lib/sanity';
 import { initiateCheckout } from '../../utils/razorpay';
 import Header from '../home/components/Header';
 import Footer from '../home/components/Footer';
+import CheckoutModal from './CheckoutModal';
 import { useSEO, generateProductSchema, generateBreadcrumbSchema } from '../../utils/seo';
 import { ChevronLeft, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Globe, Clock, Users, Lock, X } from 'lucide-react';
 
@@ -47,6 +48,7 @@ export default function ProductDetailPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   
   // Review Form State
@@ -141,7 +143,14 @@ export default function ProductDetailPage() {
       return;
     }
 
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleConfirmCheckout = (name: string, email: string) => {
+    if (!product) return;
+    setIsCheckoutModalOpen(false);
     setIsPurchasing(true);
+
     initiateCheckout({
       amount: product.offerPrice * 100,
       currency: 'INR',
@@ -149,7 +158,10 @@ export default function ProductDetailPage() {
       description: 'Digital Product Access',
       productId: product._id,
       image: product.imageUrl,
+      buyerName: name,
+      buyerEmail: email,
       onSuccess: (response) => {
+        localStorage.setItem('buyer_email', email);
         navigate(`/thank-you?payment_id=${response.razorpay_payment_id}&product_id=${product._id}`);
       },
       onCancel: () => setIsPurchasing(false),
@@ -575,6 +587,14 @@ export default function ProductDetailPage() {
       </div>
 
       <Footer />
+
+      <CheckoutModal
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+        onConfirm={handleConfirmCheckout}
+        productName={product.title}
+        price={product.offerPrice}
+      />
     </div>
   );
 }
