@@ -17,11 +17,12 @@ export default function Header() {
   }, []);
 
   const navLinks = [
+    { name: t('nav.home'), path: '/' },
     { name: t('nav.services'), path: '/services' },
     { name: t('nav.about'), path: '/about' },
     { name: t('nav.it_support'), path: '/services/it-support' },
     { name: t('nav.website_dev'), path: '/services/website-development' },
-    { name: t('nav.digital_store'), path: '/#products' },
+    { name: t('nav.digital_store'), path: '/products' },
     { name: t('nav.contact'), path: '/contact' },
   ];
 

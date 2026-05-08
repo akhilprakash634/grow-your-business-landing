@@ -1,4 +1,5 @@
 const common = {
+  "nav.home": "Home",
   "nav.services": "Services",
   "nav.about": "About",
   "nav.it_support": "IT Support",

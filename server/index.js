@@ -5,7 +5,16 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const { createClient } = require('@sanity/client');
 require('dotenv').config();
+
+const sanityClient = createClient({
+  projectId: '5n8h847y',
+  dataset: 'production',
+  useCdn: false,
+  apiVersion: '2024-05-08',
+  token: process.env.SANITY_API_TOKEN, // Requires a token with write access
+});
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const SALES_FILE = path.join(DATA_DIR, 'sales.json');
@@ -144,6 +153,32 @@ const sendConfirmationEmail = async (email, name, productId = 'first-client') =>
   }
 };
 
+const syncOrderToSanity = async (orderData) => {
+  if (!process.env.SANITY_API_TOKEN) {
+    console.log('Skipping Sanity sync: SANITY_API_TOKEN not configured');
+    return;
+  }
+
+  try {
+    const doc = {
+      _type: 'order',
+      customerName: orderData.name,
+      customerEmail: orderData.email,
+      productId: orderData.product_id,
+      amount: orderData.amount / 100, // Convert paise to INR
+      paymentId: orderData.razorpay_payment_id,
+      orderId: orderData.razorpay_order_id,
+      status: 'completed',
+      createdAt: new Date().toISOString(),
+    };
+
+    await sanityClient.create(doc);
+    console.log(`Order synced to Sanity for ${orderData.email}`);
+  } catch (error) {
+    console.error('Error syncing order to Sanity:', error);
+  }
+};
+
 // Health check
 app.get('/', (req, res) => {
   res.json({ status: 'active', message: 'Grow Your Business API is running' });
@@ -204,6 +239,12 @@ app.post('/api/verify-payment', (req, res) => {
       if (buyer_email) {
         addBuyer(buyer_email, buyer_name);
         sendConfirmationEmail(buyer_email, buyer_name, req.body.product_id);
+        syncOrderToSanity({
+          ...req.body,
+          email: buyer_email,
+          name: buyer_name,
+          amount: req.body.amount || 0 // Assuming amount is passed or fetched
+        });
       }
       res.json({ status: 'success', message: 'Payment verified successfully' });
     } else {
@@ -288,6 +329,40 @@ app.post('/api/request-support', (req, res) => {
   } catch (error) {
     console.error('Error processing support request:', error);
     res.status(500).json({ authorized: false, error: 'Server error' });
+  }
+});
+
+// Submit review
+app.post('/api/submit-review', async (req, res) => {
+  try {
+    const { name, rating, comment, productId } = req.body;
+    
+    if (!name || !rating || !comment || !productId) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    if (!process.env.SANITY_API_TOKEN) {
+      return res.status(500).json({ error: 'Sanity configuration missing' });
+    }
+
+    const doc = {
+      _type: 'review',
+      name,
+      rating: parseInt(rating),
+      comment,
+      product: {
+        _type: 'reference',
+        _ref: productId,
+      },
+      approved: false, // Default to unapproved for safe moderation
+      createdAt: new Date().toISOString(),
+    };
+
+    await sanityClient.create(doc);
+    res.json({ status: 'success', message: 'Review submitted for approval! It will be visible once approved.' });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ error: 'Failed to submit review', details: error.message });
   }
 });
 
