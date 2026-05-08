@@ -8,7 +8,7 @@ export const client = createClient({
 })
 
 export const fetchProducts = async () => {
-  return await client.fetch(`*[_type == "product"]{
+  return await client.fetch(`*[_type == "product" && disabled != true]{
     _id,
     title,
     "slug": slug.current,

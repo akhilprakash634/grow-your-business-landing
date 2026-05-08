@@ -81,5 +81,12 @@ export const product = defineType({
       initialValue: 0,
       description: 'Total number of reviews to display for social proof.'
     }),
+    defineField({
+      name: 'disabled',
+      title: 'Disable Product',
+      type: 'boolean',
+      initialValue: false,
+      description: 'If enabled, this product will be hidden from the store and cannot be purchased.'
+    }),
   ],
 })
