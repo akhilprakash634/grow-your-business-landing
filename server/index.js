@@ -332,17 +332,12 @@ app.post('/api/request-support', (req, res) => {
   }
 });
 
-// Submit review
 app.post('/api/submit-review', async (req, res) => {
   try {
     const { name, rating, comment, productId } = req.body;
     
     if (!name || !rating || !comment || !productId) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    if (!process.env.SANITY_API_TOKEN) {
-      return res.status(500).json({ error: 'Sanity configuration missing' });
+      return res.status(400).json({ error: 'Missing required fields: name, rating, comment, and productId are all required.' });
     }
 
     const doc = {
@@ -354,11 +349,12 @@ app.post('/api/submit-review', async (req, res) => {
         _type: 'reference',
         _ref: productId,
       },
-      approved: false, // Default to unapproved for safe moderation
+      approved: false,
       createdAt: new Date().toISOString(),
     };
 
-    await sanityClient.create(doc);
+    const result = await sanityClient.create(doc);
+    console.log('Review created in Sanity:', result._id);
     res.json({ status: 'success', message: 'Review submitted for approval! It will be visible once approved.' });
   } catch (error) {
     console.error('Error submitting review:', error);
@@ -366,6 +362,50 @@ app.post('/api/submit-review', async (req, res) => {
   }
 });
 
+
+// Admin: Get all reviews
+app.get('/api/admin/reviews', async (req, res) => {
+  try {
+    const query = `*[_type == "review"] | order(createdAt desc) {
+      _id,
+      name,
+      rating,
+      comment,
+      approved,
+      createdAt,
+      "productTitle": product->title
+    }`;
+    const reviews = await sanityClient.fetch(query);
+    res.json(reviews);
+  } catch (error) {
+    console.error('Error fetching admin reviews:', error);
+    res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+});
+
+// Admin: Approve review
+app.post('/api/admin/approve-review', async (req, res) => {
+  try {
+    const { reviewId } = req.body;
+    await sanityClient.patch(reviewId).set({ approved: true }).commit();
+    res.json({ status: 'success' });
+  } catch (error) {
+    console.error('Error approving review:', error);
+    res.status(500).json({ error: 'Failed to approve review' });
+  }
+});
+
+// Admin: Delete review
+app.post('/api/admin/delete-review', async (req, res) => {
+  try {
+    const { reviewId } = req.body;
+    await sanityClient.delete(reviewId);
+    res.json({ status: 'success' });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).json({ error: 'Failed to delete review' });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 

@@ -66,5 +66,20 @@ export const product = defineType({
       of: [{ type: 'image' }],
       description: 'Upload screenshots of the first few pages of the PDF for the quick preview modal.'
     }),
+    defineField({
+      name: 'rating',
+      title: 'Average Rating (Manual)',
+      type: 'number',
+      initialValue: 5,
+      validation: (Rule) => Rule.min(1).max(5),
+      description: 'Used for social proof display if there are no customer reviews.'
+    }),
+    defineField({
+      name: 'totalReviews',
+      title: 'Total Reviews (Manual)',
+      type: 'number',
+      initialValue: 0,
+      description: 'Total number of reviews to display for social proof.'
+    }),
   ],
 })

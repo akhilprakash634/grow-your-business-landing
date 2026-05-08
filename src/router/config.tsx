@@ -19,10 +19,16 @@ import ProductAccessPage from "../pages/product-access/page";
 import ProductDetailPage from "../pages/product-detail/page";
 import ProductsPage from "../pages/products/page";
 
+import AdminReviewsPage from "../pages/admin/reviews/page";
+
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/admin/reviews",
+    element: <AdminReviewsPage />,
   },
   {
     path: "/services",
