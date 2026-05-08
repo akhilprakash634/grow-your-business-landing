@@ -4,7 +4,8 @@ const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const nodemailer = require('nodemailer'); 
+const nodemailer = require('nodemailer');
+const { createClient } = require('@sanity/client');
 require('dotenv').config();
 
 const sanityClient = createClient({
