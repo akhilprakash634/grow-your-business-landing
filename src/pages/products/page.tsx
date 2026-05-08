@@ -51,9 +51,9 @@ export default function ProductsPage() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="pt-32 pb-20 px-6 relative overflow-hidden border-b border-white/5">
+        <section className="pt-24 md:pt-32 pb-12 md:pb-20 px-6 relative overflow-hidden border-b border-white/5">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] -z-10"></div>
-          <div className="max-w-7xl mx-auto text-center space-y-6">
+          <div className="max-w-7xl mx-auto text-center space-y-4 md:space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-widest">
               <Sparkles size={14} /> Premium Business Assets
             </div>
@@ -67,16 +67,16 @@ export default function ProductsPage() {
         </section>
 
         {/* Catalog Section */}
-        <section className="py-20 px-6 bg-gray-950/50">
+        <section className="py-10 md:py-20 px-6 bg-gray-950/50">
           <div className="max-w-7xl mx-auto">
             {loading ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="animate-pulse bg-gray-900 h-[400px] rounded-3xl border border-white/5"></div>
                 ))}
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {products.length > 0 ? (
                   products.map((product) => (
                     <div 
@@ -176,7 +176,7 @@ export default function ProductsPage() {
             onClick={() => setPreviewProduct(null)}
           ></div>
           
-          <div className="relative bg-gray-900 border border-white/10 rounded-[2.5rem] w-full max-w-5xl overflow-hidden shadow-2xl flex flex-col lg:flex-row animate-in fade-in zoom-in duration-300 max-h-[90vh]">
+          <div className="relative bg-gray-900 border border-white/10 rounded-3xl lg:rounded-[2.5rem] w-full max-w-5xl overflow-hidden shadow-2xl flex flex-col lg:flex-row animate-in fade-in zoom-in duration-300 max-h-[90vh]">
             <button 
               onClick={() => setPreviewProduct(null)}
               className="absolute top-6 right-6 z-20 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full backdrop-blur-md transition-colors"
@@ -244,7 +244,7 @@ export default function ProductsPage() {
             </div>
 
             {/* Modal Info */}
-            <div className="w-full lg:w-[40%] p-8 sm:p-10 flex flex-col overflow-y-auto bg-gray-900">
+            <div className="w-full lg:w-[40%] p-6 sm:p-10 flex flex-col overflow-y-auto bg-gray-900">
               <div className="space-y-6">
                 <div>
                   <span className="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">

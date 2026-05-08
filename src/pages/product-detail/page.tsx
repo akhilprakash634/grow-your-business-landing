@@ -205,8 +205,8 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-gray-950 text-gray-50 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
       <Header />
       
-      <main className="flex-1 pt-24 pb-20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto space-y-20">
+      <main className="flex-1 pt-16 md:pt-24 pb-12 md:pb-20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-12 md:space-y-20">
           {/* Breadcrumb & Top Section */}
           <div>
             <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-emerald-400 transition-colors mb-8 group">
@@ -215,8 +215,8 @@ export default function ProductDetailPage() {
 
             <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
               {/* Left Side: Product Image, Highlights & What's Included */}
-              <div className="lg:col-span-5 space-y-8">
-                <div className="bg-gray-900 rounded-[2rem] p-4 sm:p-8 border border-white/5 shadow-2xl overflow-hidden relative group">
+              <div className="lg:col-span-5 space-y-6 md:space-y-8">
+                <div className="bg-gray-900 rounded-3xl lg:rounded-[2rem] p-4 md:p-8 border border-white/5 shadow-2xl overflow-hidden relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-50"></div>
                   {product.imageUrl ? (
                     <img 
@@ -247,7 +247,7 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* What's Included (Fill left space) */}
-                <div className="bg-gray-900/30 border border-white/5 rounded-3xl p-8 space-y-6">
+                <div className="bg-gray-900/30 border border-white/5 rounded-[2rem] md:rounded-3xl p-6 md:p-8 space-y-4 md:space-y-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <CheckCircle2 className="text-emerald-500" /> What's Included
                   </h3>
@@ -295,7 +295,7 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Pricing Card */}
-                <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-[2.5rem] p-6 sm:p-10 shadow-2xl relative overflow-hidden group/card">
+                <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl lg:rounded-[2.5rem] p-5 sm:p-10 shadow-2xl relative overflow-hidden group/card">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px] -z-0"></div>
                   
                   <div className="relative z-10 space-y-8">
@@ -361,8 +361,8 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Customer Reviews Section (Full Width) */}
-          <div className="pt-16 border-t border-white/5">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+          <div className="pt-10 md:pt-16 border-t border-white/5">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-8 md:mb-12">
               <div className="space-y-4">
                 <h3 className="text-3xl sm:text-4xl font-black text-white">Customer Reviews</h3>
                 <div className="flex items-center gap-6">
