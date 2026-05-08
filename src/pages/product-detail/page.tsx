@@ -5,7 +5,12 @@ import { initiateCheckout } from '../../utils/razorpay';
 import Header from '../home/components/Header';
 import Footer from '../home/components/Footer';
 import { useSEO, generateProductSchema, generateBreadcrumbSchema } from '../../utils/seo';
-import { ChevronLeft, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Globe, Clock, Users, Lock } from 'lucide-react';
+import { ChevronLeft, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Globe, Clock, Users, Lock, X } from 'lucide-react';
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
 
 interface Product {
   _id: string;
@@ -16,6 +21,15 @@ interface Product {
   imageUrl: string;
   downloadLink: string;
   slug: string;
+  headline?: string;
+  subheadline?: string;
+  problemPoints?: string[];
+  solutionText?: string;
+  deliverables?: string[];
+  benefits?: string[];
+  audience?: string[];
+  faqs?: FAQ[];
+  ctaText?: string;
 }
 
 interface Review {
@@ -82,7 +96,16 @@ export default function ProductDetailPage() {
             offerPrice,
             "imageUrl": image.asset->url,
             downloadLink,
-            "slug": slug.current
+            "slug": slug.current,
+            headline,
+            subheadline,
+            problemPoints,
+            solutionText,
+            deliverables,
+            benefits,
+            audience,
+            faqs,
+            ctaText
           }`,
           { slug }
         );
@@ -214,8 +237,8 @@ export default function ProductDetailPage() {
             </Link>
 
             <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-              {/* Left Side: Product Image, Highlights & What's Included */}
-              <div className="lg:col-span-5 space-y-6 md:space-y-8">
+              {/* Left Side: Product Image & Pricing (Sticky on Desktop) */}
+              <div className="lg:col-span-5 space-y-6 md:space-y-8 lg:sticky lg:top-24">
                 <div className="bg-gray-900 rounded-3xl lg:rounded-[2rem] p-4 md:p-8 border border-white/5 shadow-2xl overflow-hidden relative group">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-50"></div>
                   {product.imageUrl ? (
@@ -229,9 +252,6 @@ export default function ProductDetailPage() {
                       <Download size={64} className="text-gray-700" />
                     </div>
                   )}
-                  
-                  {/* Visual Accent */}
-                  <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-[80px] -z-0"></div>
                 </div>
 
                 {/* Trust Indicators */}
@@ -246,73 +266,18 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {/* What's Included (Fill left space) */}
-                <div className="bg-gray-900/30 border border-white/5 rounded-[2rem] md:rounded-3xl p-6 md:p-8 space-y-4 md:space-y-6">
-                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    <CheckCircle2 className="text-emerald-500" /> What's Included
-                  </h3>
-                  <div className="space-y-4">
-                    {[
-                      "Complete digital PDF playbook",
-                      "Step-by-step execution guides",
-                      "Ready-to-use templates & scripts",
-                      "Lifetime access to future updates",
-                      "Exclusive bonus resources",
-                      "Direct support for implementation"
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-start gap-3 group">
-                        <div className="mt-1 w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
-                          <CheckCircle2 size={12} />
-                        </div>
-                        <span className="text-gray-400 group-hover:text-white transition-colors">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Side: Product Details & Pricing */}
-              <div className="lg:col-span-7 space-y-10">
-                <div className="space-y-6">
-                  <div className="flex flex-wrap gap-3">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-widest">
-                      <Zap size={10} className="fill-emerald-400" /> Premium Access
-                    </div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-black uppercase tracking-widest">
-                      <Globe size={10} /> Hindi & English
-                    </div>
-                  </div>
-
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] text-white tracking-tight">
-                    {product.title.replace(/-/g, ' ')}
-                  </h1>
-
-                  <div className="prose prose-invert max-w-none">
-                    <p className="text-lg sm:text-xl text-gray-400 leading-relaxed font-medium">
-                      {product.description}
-                    </p>
-                  </div>
-                </div>
-
                 {/* Pricing Card */}
                 <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl lg:rounded-[2.5rem] p-5 sm:p-10 shadow-2xl relative overflow-hidden group/card">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px] -z-0"></div>
                   
                   <div className="relative z-10 space-y-8">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                      <div className="space-y-1">
-                        <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">Special Launch Price</p>
-                        <div className="flex items-center gap-4">
-                          <span className="text-5xl sm:text-6xl font-black text-white">₹{product.offerPrice}</span>
-                          {product.actualPrice > product.offerPrice && (
-                            <span className="text-xl sm:text-2xl text-gray-600 font-medium line-through decoration-emerald-500/50 decoration-2">₹{product.actualPrice}</span>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="hidden sm:block text-right">
-                        <p className="text-emerald-400 font-bold text-sm">Save {Math.round(((product.actualPrice - product.offerPrice) / product.actualPrice) * 100)}% Today</p>
-                        <p className="text-gray-500 text-xs">One-time payment only</p>
+                    <div className="space-y-1">
+                      <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl sm:text-5xl font-black text-white">₹{product.offerPrice}</span>
+                        {product.actualPrice > product.offerPrice && (
+                          <span className="text-lg sm:text-xl text-gray-600 font-medium line-through decoration-emerald-500/50 decoration-2">₹{product.actualPrice}</span>
+                        )}
                       </div>
                     </div>
 
@@ -320,7 +285,7 @@ export default function ProductDetailPage() {
                       <button 
                         onClick={handlePurchase}
                         disabled={isPurchasing}
-                        className="w-full py-5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl rounded-2xl transition-all active:scale-[0.98] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed group"
+                        className="w-full py-5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl rounded-2xl transition-all active:scale-[0.98] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center justify-center gap-3 disabled:opacity-70 group"
                       >
                         {isPurchasing ? (
                           <>
@@ -329,33 +294,137 @@ export default function ProductDetailPage() {
                           </>
                         ) : (
                           <>
-                            {product.offerPrice === 0 ? 'Download Free Now' : 'Get Instant Access Now'} 
+                            {product.ctaText || (product.offerPrice === 0 ? 'Download Free Now' : 'Get Instant Access Now')} 
                             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                           </>
                         )}
                       </button>
                       
-                      <p className="text-center text-xs text-gray-500 flex items-center justify-center gap-2">
-                        <Lock size={12} className="text-emerald-500" /> 256-bit Secure Encrypted Payment
+                      <p className="text-center text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-2 flex items-center justify-center gap-2">
+                        <Lock size={12} className="text-emerald-500" /> 256-bit Secure Checkout
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                      <div className="flex items-center gap-3 text-sm text-gray-300 bg-white/5 p-3 rounded-xl border border-white/5">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-500">
-                          <ShieldCheck size={18} />
-                        </div>
-                        Verified Product
+                    <div className="grid grid-cols-1 gap-3 pt-4 border-t border-white/5">
+                      <div className="flex items-center gap-3 text-sm text-gray-300">
+                        <ShieldCheck size={18} className="text-emerald-500" />
+                        Verified Digital Access
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300 bg-white/5 p-3 rounded-xl border border-white/5">
-                        <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 text-blue-500">
-                          <Clock size={18} />
-                        </div>
-                        Lifetime Updates
+                      <div className="flex items-center gap-3 text-sm text-gray-300">
+                        <Clock size={18} className="text-blue-500" />
+                        Lifetime Updates Included
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Right Side: Persuasive Landing Page Flow */}
+              <div className="lg:col-span-7 space-y-12 md:space-y-20">
+                {/* 1. Hero / Hook */}
+                <div className="space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-widest">
+                    <Zap size={10} className="fill-emerald-400" /> High-Performance System
+                  </div>
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-[1.1] text-white tracking-tight">
+                    {product.headline || product.title.replace(/-/g, ' ')}
+                  </h1>
+                  <p className="text-lg sm:text-xl text-gray-400 leading-relaxed font-medium">
+                    {product.subheadline || product.description}
+                  </p>
+                </div>
+
+                {/* 2. Problem Section */}
+                {product.problemPoints && product.problemPoints.length > 0 && (
+                  <div className="bg-red-500/5 border border-red-500/10 rounded-[2rem] p-8 space-y-6">
+                    <h3 className="text-xl font-bold text-red-400 flex items-center gap-2">
+                      <X className="w-5 h-5" /> Does this sound like you?
+                    </h3>
+                    <ul className="space-y-4">
+                      {product.problemPoints.map((point, i) => (
+                        <li key={i} className="flex items-start gap-3 text-gray-400">
+                          <div className="w-1.5 h-1.5 rounded-full bg-red-500/40 mt-2 shrink-0" />
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* 3. Solution Section */}
+                {product.solutionText && (
+                  <div className="space-y-6">
+                    <h3 className="text-2xl font-bold text-white">The Simple Solution</h3>
+                    <div className="prose prose-invert max-w-none text-gray-400 text-lg leading-relaxed whitespace-pre-wrap">
+                      {product.solutionText}
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. What You Get (Deliverables) */}
+                <div className="bg-gray-900/40 border border-white/5 rounded-[2rem] p-8 space-y-8">
+                  <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                    <CheckCircle2 className="text-emerald-500" /> What's Included Today
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    {(product.deliverables || [
+                      "Full Digital Playbook (PDF)",
+                      "Step-by-Step Execution Guide",
+                      "Ready-to-use Templates",
+                      "Bonus Resource Library"
+                    ]).map((item, i) => (
+                      <div key={i} className="flex items-start gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 group hover:border-emerald-500/30 transition-colors">
+                        <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+                          <CheckCircle2 size={16} />
+                        </div>
+                        <span className="text-gray-300 font-medium leading-snug">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 5. Audience Section */}
+                {product.audience && product.audience.length > 0 && (
+                  <div className="space-y-6">
+                    <h3 className="text-2xl font-bold text-white">Who is this for?</h3>
+                    <div className="flex flex-wrap gap-3">
+                      {product.audience.map((person, i) => (
+                        <span key={i} className="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-gray-300 font-bold text-sm">
+                          {person}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 6. Benefits Section */}
+                {product.benefits && product.benefits.length > 0 && (
+                  <div className="grid sm:grid-cols-2 gap-8">
+                    {product.benefits.map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 shadow-lg shadow-emerald-500/10">
+                          <Zap size={24} className="fill-current" />
+                        </div>
+                        <span className="text-gray-300 font-bold text-lg leading-tight">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* 7. FAQ Section */}
+                {product.faqs && product.faqs.length > 0 && (
+                  <div className="space-y-8">
+                    <h3 className="text-2xl font-bold text-white">Frequently Asked Questions</h3>
+                    <div className="grid gap-4">
+                      {product.faqs.map((faq, i) => (
+                        <div key={i} className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 space-y-2">
+                          <h4 className="font-bold text-white text-lg">Q: {faq.question}</h4>
+                          <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
