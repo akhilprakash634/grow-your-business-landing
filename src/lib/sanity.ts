@@ -16,7 +16,8 @@ export const fetchProducts = async () => {
     "imageUrl": image.asset->url,
     actualPrice,
     offerPrice,
-    downloadLink
+    downloadLink,
+    "previewUrls": previewImages[].asset->url
   }`)
 }
 
