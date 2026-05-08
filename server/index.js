@@ -13,8 +13,13 @@ const sanityClient = createClient({
   dataset: 'production',
   useCdn: false,
   apiVersion: '2024-05-08',
-  token: process.env.SANITY_API_TOKEN, // Requires a token with write access
+  token: process.env.SANITY_API_TOKEN,
 });
+
+console.log('Sanity Client initialized. Token exists:', !!process.env.SANITY_API_TOKEN);
+if (!process.env.SANITY_API_TOKEN) {
+  console.error('CRITICAL: SANITY_API_TOKEN is missing in environment variables!');
+}
 
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const SALES_FILE = path.join(DATA_DIR, 'sales.json');
