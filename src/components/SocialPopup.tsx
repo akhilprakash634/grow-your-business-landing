@@ -21,7 +21,7 @@ export default function SocialPopup() {
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
-    
+
     // Check if we should show it at all on this mobile visit (60% chance)
     if (isMobile && Math.random() > 0.6) {
       return;
@@ -30,8 +30,8 @@ export default function SocialPopup() {
     // Show the floating button
     // Mobile: Random delay between 15-40 seconds for a more "organic" feel
     // Desktop: Fixed 5 seconds for immediate engagement
-    const delay = isMobile 
-      ? Math.floor(Math.random() * (40000 - 15000 + 1)) + 15000 
+    const delay = isMobile
+      ? Math.floor(Math.random() * (40000 - 15000 + 1)) + 15000
       : 5000;
 
     const timer = setTimeout(() => {
@@ -48,10 +48,9 @@ export default function SocialPopup() {
   return (
     <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 pointer-events-none">
       {/* Expanded Menu */}
-      <div 
-        className={`bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-slate-100 p-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right pointer-events-auto ${
-          isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
-        }`}
+      <div
+        className={`bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-slate-100 p-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right pointer-events-auto ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
+          }`}
       >
         <div className="space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-slate-50">
@@ -100,9 +99,8 @@ export default function SocialPopup() {
 
       {/* Floating Trigger Button */}
       <div className="flex items-center gap-3 pointer-events-auto">
-        <div className={`bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 transition-all duration-500 ${
-          isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'
-        }`}>
+        <div className={`bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 transition-all duration-500 ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'
+          }`}>
           <p className="text-xs font-black text-slate-800 flex items-center gap-2">
             <span className="flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
@@ -114,11 +112,10 @@ export default function SocialPopup() {
 
         <button
           onClick={toggleOpen}
-          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 active:scale-90 ${
-            isOpen 
-              ? 'bg-slate-800 text-white rotate-90 hover:bg-slate-900' 
+          className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 active:scale-90 ${isOpen
+              ? 'bg-slate-800 text-white rotate-90 hover:bg-slate-900'
               : 'bg-emerald-500 text-white hover:bg-emerald-600'
-          }`}
+            }`}
         >
           {isOpen ? <X size={24} strokeWidth={3} /> : <Users size={24} strokeWidth={2.5} />}
         </button>
