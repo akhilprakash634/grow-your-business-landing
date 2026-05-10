@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { client } from '../../lib/sanity';
 import { initiateCheckout } from '../../utils/razorpay';
@@ -6,7 +6,7 @@ import Header from '../home/components/Header';
 import Footer from '../home/components/Footer';
 import CheckoutModal from './CheckoutModal';
 import { useSEO, generateProductSchema, generateBreadcrumbSchema } from '../../utils/seo';
-import { ChevronLeft, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Globe, Clock, Users, Lock, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Clock, Users, Lock, X, Images } from 'lucide-react';
 
 interface FAQ {
   question: string;
@@ -31,6 +31,7 @@ interface Product {
   audience?: string[];
   faqs?: FAQ[];
   ctaText?: string;
+  previewUrls?: string[];
 }
 
 interface Review {
@@ -50,6 +51,10 @@ export default function ProductDetailPage() {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
+
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   
   // Review Form State
   const [reviewName, setReviewName] = useState('');
@@ -86,6 +91,37 @@ export default function ProductDetailPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+    document.body.style.overflow = '';
+  }, []);
+
+  const prevImage = useCallback(() => {
+    setLightboxIndex(i => (i - 1 + (product?.previewUrls?.length ?? 1)) % (product?.previewUrls?.length ?? 1));
+  }, [product?.previewUrls?.length]);
+
+  const nextImage = useCallback(() => {
+    setLightboxIndex(i => (i + 1) % (product?.previewUrls?.length ?? 1));
+  }, [product?.previewUrls?.length]);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightboxOpen, closeLightbox, prevImage, nextImage]);
+
   useEffect(() => {
     const getProductData = async () => {
       try {
@@ -107,7 +143,8 @@ export default function ProductDetailPage() {
             benefits,
             audience,
             faqs,
-            ctaText
+            ctaText,
+            "previewUrls": previewImages[].asset->url
           }`,
           { slug }
         );
@@ -395,7 +432,44 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {/* 5. Audience Section */}
+                {/* 5. Screenshots / Preview Images Section */}
+                {product.previewUrls && product.previewUrls.length > 0 && (
+                  <div className="space-y-6">
+                    <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+                        <Images size={20} />
+                      </span>
+                      Inside Preview
+                    </h3>
+                    <p className="text-gray-500 text-sm">Click any image to view full size</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {product.previewUrls.map((url, i) => (
+                        <button
+                          key={i}
+                          onClick={() => openLightbox(i)}
+                          className="group relative overflow-hidden rounded-2xl border border-white/5 bg-gray-900 aspect-[3/4] shadow-lg hover:border-emerald-500/40 hover:shadow-emerald-500/10 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        >
+                          <img
+                            src={url}
+                            alt={`Preview ${i + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="text-white text-xs font-bold bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
+                              View Full
+                            </span>
+                          </div>
+                          <div className="absolute top-2 left-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+                            {i + 1}/{product.previewUrls!.length}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 6. Audience Section */}
                 {product.audience && product.audience.length > 0 && (
                   <div className="space-y-6">
                     <h3 className="text-2xl font-bold text-white">Who is this for?</h3>
@@ -595,6 +669,79 @@ export default function ProductDetailPage() {
         productName={product.title}
         price={product.offerPrice}
       />
+
+      {/* Lightbox */}
+      {lightboxOpen && product.previewUrls && product.previewUrls.length > 0 && (
+        <div
+          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
+          onClick={closeLightbox}
+        >
+          {/* Close */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+          >
+            <X size={20} />
+          </button>
+
+          {/* Counter */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/60 text-sm font-bold bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+            {lightboxIndex + 1} / {product.previewUrls.length}
+          </div>
+
+          {/* Prev */}
+          {product.previewUrls.length > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          )}
+
+          {/* Image */}
+          <div
+            className="max-w-4xl max-h-[85vh] w-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              key={lightboxIndex}
+              src={product.previewUrls[lightboxIndex]}
+              alt={`Preview ${lightboxIndex + 1}`}
+              className="max-h-[85vh] max-w-full object-contain rounded-2xl shadow-2xl animate-in fade-in duration-200"
+            />
+          </div>
+
+          {/* Next */}
+          {product.previewUrls.length > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
+
+          {/* Thumbnails strip */}
+          {product.previewUrls.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 overflow-x-auto max-w-[90vw] pb-1">
+              {product.previewUrls.map((url, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setLightboxIndex(i); }}
+                  className={`flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                    i === lightboxIndex
+                      ? 'border-emerald-500 opacity-100 scale-110'
+                      : 'border-white/20 opacity-50 hover:opacity-80'
+                  }`}
+                >
+                  <img src={url} alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
