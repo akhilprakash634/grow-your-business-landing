@@ -31,6 +31,7 @@ interface Product {
   audience?: string[];
   faqs?: FAQ[];
   ctaText?: string;
+  countdownMinutes?: number;
   previewUrls?: string[];
 }
 
@@ -62,6 +63,28 @@ export default function ProductDetailPage() {
   const [reviewComment, setReviewComment] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewStatus, setReviewStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+  // Countdown timer state
+  const [timeLeft, setTimeLeft] = useState(15 * 60);
+
+  useEffect(() => {
+    if (product && product.countdownMinutes !== undefined) {
+      setTimeLeft(product.countdownMinutes * 60);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   // SEO Integration
   useSEO({
@@ -144,6 +167,7 @@ export default function ProductDetailPage() {
             audience,
             faqs,
             ctaText,
+            countdownMinutes,
             "previewUrls": previewImages[].asset->url
           }`,
           { slug }
@@ -320,8 +344,16 @@ export default function ProductDetailPage() {
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px] -z-0"></div>
                   
                   <div className="relative z-10 space-y-8">
-                    <div className="space-y-1">
-                      <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
+                    <div className="space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
+                        {(!product || product.countdownMinutes !== 0) && (
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                            <Clock size={12} />
+                            Ends in: {formatTime(timeLeft)}
+                          </div>
+                        )}
+                      </div>
                       <div className="flex items-center gap-4">
                         <span className="text-4xl sm:text-5xl font-black text-white">₹{product.offerPrice}</span>
                         {product.actualPrice > product.offerPrice && (
@@ -343,7 +375,7 @@ export default function ProductDetailPage() {
                           </>
                         ) : (
                           <>
-                            {product.ctaText || (product.offerPrice === 0 ? 'Download Free Now' : 'Get Instant Access Now')} 
+                            {product.ctaText || (product.offerPrice === 0 ? 'Yes! I Want Instant Access (Free)' : 'Yes! I Want Full Access Now')} 
                             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                           </>
                         )}
@@ -442,17 +474,17 @@ export default function ProductDetailPage() {
                       Inside Preview
                     </h3>
                     <p className="text-gray-500 text-sm">Click any image to view full size</p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {product.previewUrls.map((url, i) => (
                         <button
                           key={i}
                           onClick={() => openLightbox(i)}
-                          className="group relative overflow-hidden rounded-2xl border border-white/5 bg-gray-900 aspect-[3/4] shadow-lg hover:border-emerald-500/40 hover:shadow-emerald-500/10 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          className="group relative overflow-hidden rounded-2xl border border-white/5 bg-gray-900 aspect-video shadow-lg hover:border-emerald-500/40 hover:shadow-emerald-500/10 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         >
                           <img
-                            src={url}
+                            src={`${url}?w=1200&q=90`}
                             alt={`Preview ${i + 1}`}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -656,7 +688,7 @@ export default function ProductDetailPage() {
           disabled={isPurchasing}
           className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : (product.offerPrice === 0 ? 'Download Free' : `Get Access • ₹${product.offerPrice}`)}
+          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : (product.offerPrice === 0 ? 'Yes! Download Free' : `Yes! I Want Access • ₹${product.offerPrice}`)}
         </button>
       </div>
 
