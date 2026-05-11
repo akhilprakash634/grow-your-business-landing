@@ -147,9 +147,9 @@ const sendConfirmationEmail = async (email, name, productId) => {
           <p>We've unlocked everything for you. Your journey starts today.</p>
    
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
-            <h3 style="margin-top: 0; color: #10b981;">1. Download Your Product:</h3>
-            <p>You can access your complete PDF playbook via our secure OneDrive link here:</p>
-            <a href="${productData.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Download Complete PDF</a>
+            <h3 style="margin-top: 0; color: #10b981;">1. Access Your Product:</h3>
+            <p>You can access your complete ${productData.downloadLink.includes('notion') ? 'Notion system' : 'PDF playbook'} via our secure link here:</p>
+            <a href="${productData.downloadLink}" style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">${productData.downloadLink.includes('notion') ? 'Open Notion System' : 'Download Complete PDF'}</a>
           </div>
 
           <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2563eb;">
@@ -160,6 +160,18 @@ const sendConfirmationEmail = async (email, name, productId) => {
               <a href="https://t.me/+nU7ZzIXV_dkyNTJl" style="display: inline-block; background-color: #0088cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-bottom: 10px;">Join Telegram Channel</a>
             </div>
           </div>
+
+          ${productData.downloadLink.includes('notion') ? `
+          <div style="background-color: #fefce8; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #eab308;">
+            <h3 style="margin-top: 0; color: #a16207;">3. Usage Instructions:</h3>
+            <p>Before you start using the system, please follow these steps:</p>
+            <ol>
+              <li><strong>Create a Notion Account:</strong> If you don't have one, create a free account at <a href="https://www.notion.so/">notion.so</a>.</li>
+              <li><strong>Duplicate the Template:</strong> Open the link below and click "Duplicate" at the top right to add it to your own workspace:</li>
+            </ol>
+            <a href="${productData.downloadLink}" style="display: inline-block; background-color: #000000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 10px;">Duplicate Notion Template</a>
+          </div>
+          ` : ''}
    
           <p style="margin-top: 30px;">If you have any questions or need help, feel free to reply to this email or reach out to us on WhatsApp (+91 62828 63459).</p>
           
