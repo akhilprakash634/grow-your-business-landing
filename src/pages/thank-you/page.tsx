@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { gtag } from '../../utils/analytics';
 import { useSEO } from '../../utils/seo';
 import { client } from '../../lib/sanity';
 import { CheckCircle2, Unlock, Mail, Download, Loader2, ArrowRight, Headphones } from 'lucide-react';
@@ -17,7 +18,7 @@ export default function ThankYouPage() {
   const [error, setError] = useState('');
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [productData, setProductData] = useState<{ title: string; downloadLink: string } | null>(null);
+  const [productData, setProductData] = useState<{ title: string; downloadLink: string; offerPrice?: number } | null>(null);
   
   const paymentId = searchParams.get('payment_id');
   const productId = searchParams.get('product_id');
@@ -30,7 +31,7 @@ export default function ThankYouPage() {
       }
       try {
         const data = await client.fetch(
-          `*[_id == $id || _id == "drafts." + $id][0]{ title, downloadLink }`,
+          `*[_id == $id || _id == "drafts." + $id][0]{ title, downloadLink, offerPrice }`,
           { id: productId }
         );
         setProductData(data);
@@ -73,6 +74,19 @@ export default function ThankYouPage() {
         if (!registeredPayments.includes(pId)) {
           registeredPayments.push(pId);
           localStorage.setItem('registered_payments', JSON.stringify(registeredPayments));
+          
+          // Track purchase event
+          gtag('event', 'purchase', {
+            transaction_id: pId,
+            value: productData?.offerPrice || 999, // Fallback if price missing
+            currency: 'INR',
+            items: [{
+              item_id: prodId,
+              item_name: productData?.title,
+              quantity: 1,
+              price: productData?.offerPrice
+            }]
+          });
         }
         setIsSuccess(true);
       }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { gtag } from '../../utils/analytics';
 import { client } from '../../lib/sanity';
 import { initiateCheckout } from '../../utils/razorpay';
 import Header from '../home/components/Header';
@@ -194,6 +195,18 @@ export default function ProductDetailPage() {
         if (productData) {
           setProduct(productData);
           
+          // Track view_item
+          gtag('event', 'view_item', {
+            currency: 'INR',
+            value: productData.offerPrice,
+            items: [{
+              item_id: productData._id,
+              item_name: productData.title,
+              price: productData.offerPrice,
+              quantity: 1
+            }]
+          });
+
           // Fetch approved reviews for this product
           const reviewsData = await client.fetch(
             `*[_type == "review" && product._ref == $productId && approved == true] | order(createdAt desc)`,
@@ -223,6 +236,18 @@ export default function ProductDetailPage() {
     }
 
     setIsCheckoutModalOpen(true);
+
+    // Track add_to_cart (opening modal is high intent)
+    gtag('event', 'add_to_cart', {
+      currency: 'INR',
+      value: product.offerPrice,
+      items: [{
+        item_id: product._id,
+        item_name: product.title,
+        price: product.offerPrice,
+        quantity: 1
+      }]
+    });
   };
 
   const handleConfirmCheckout = (name: string, email: string) => {
@@ -240,6 +265,18 @@ export default function ProductDetailPage() {
       buyerName: name,
       buyerEmail: email,
       onSuccess: (response) => {
+        // Track purchase (pre-verification)
+        gtag('event', 'begin_checkout', {
+          currency: 'INR',
+          value: product.offerPrice,
+          items: [{
+            item_id: product._id,
+            item_name: product.title,
+            price: product.offerPrice,
+            quantity: 1
+          }]
+        });
+
         localStorage.setItem('buyer_email', email);
         navigate(`/thank-you?payment_id=${response.razorpay_payment_id}&product_id=${product._id}`);
       },
