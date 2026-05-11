@@ -31,7 +31,12 @@ interface Product {
   audience?: string[];
   faqs?: FAQ[];
   ctaText?: string;
-  countdownMinutes?: number;
+  countdown?: {
+    days?: number;
+    hours?: number;
+    minutes?: number;
+    seconds?: number;
+  };
   previewUrls?: string[];
 }
 
@@ -68,8 +73,12 @@ export default function ProductDetailPage() {
   const [timeLeft, setTimeLeft] = useState(15 * 60);
 
   useEffect(() => {
-    if (product && product.countdownMinutes !== undefined) {
-      setTimeLeft(product.countdownMinutes * 60);
+    if (product && product.countdown) {
+      const { days = 0, hours = 0, minutes = 0, seconds = 0 } = product.countdown;
+      const totalSeconds = (days * 24 * 3600) + (hours * 3600) + (minutes * 60) + seconds;
+      setTimeLeft(totalSeconds);
+    } else if (product) {
+      setTimeLeft(0);
     }
   }, [product]);
 
@@ -80,10 +89,19 @@ export default function ProductDetailPage() {
     return () => clearInterval(timer);
   }, []);
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const s = (seconds % 60).toString().padStart(2, '0');
-    return `${m}:${s}`;
+  const formatTime = (totalSeconds: number) => {
+    const d = Math.floor(totalSeconds / (3600 * 24));
+    const h = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    
+    const parts = [];
+    if (d > 0) parts.push(`${d}d`);
+    if (d > 0 || h > 0) parts.push(`${h}h`);
+    parts.push(`${m}m`);
+    parts.push(`${s}s`);
+    
+    return parts.join(' ');
   };
 
   // SEO Integration
@@ -167,7 +185,7 @@ export default function ProductDetailPage() {
             audience,
             faqs,
             ctaText,
-            countdownMinutes,
+            countdown,
             "previewUrls": previewImages[].asset->url
           }`,
           { slug }
@@ -347,7 +365,7 @@ export default function ProductDetailPage() {
                     <div className="space-y-2">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
-                        {(!product || product.countdownMinutes !== 0) && (
+                        {timeLeft > 0 && (
                           <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-[10px] font-black uppercase tracking-widest animate-pulse">
                             <Clock size={12} />
                             Ends in: {formatTime(timeLeft)}

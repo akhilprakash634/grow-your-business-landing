@@ -106,15 +106,15 @@ export default function SocialPopup() {
               <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            Join Our Community
+            {/* Join Our Community */}
           </p>
         </div>
 
         <button
           onClick={toggleOpen}
           className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 active:scale-90 ${isOpen
-              ? 'bg-slate-800 text-white rotate-90 hover:bg-slate-900'
-              : 'bg-emerald-500 text-white hover:bg-emerald-600'
+            ? 'bg-slate-800 text-white rotate-90 hover:bg-slate-900'
+            : 'bg-emerald-500 text-white hover:bg-emerald-600'
             }`}
         >
           {isOpen ? <X size={24} strokeWidth={3} /> : <Users size={24} strokeWidth={2.5} />}

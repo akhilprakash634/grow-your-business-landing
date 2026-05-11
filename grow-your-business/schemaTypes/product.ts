@@ -134,11 +134,16 @@ export const product = defineType({
       description: 'Text for the main buy button.'
     }),
     defineField({
-      name: 'countdownMinutes',
-      title: 'Countdown Timer (Minutes)',
-      type: 'number',
-      initialValue: 15,
-      description: 'Duration of the countdown timer in minutes. Set to 0 to hide the timer.'
+      name: 'countdown',
+      title: 'Countdown Timer Duration',
+      type: 'object',
+      description: 'Set the evergreen countdown timer duration. Set all to 0 to hide.',
+      fields: [
+        {name: 'days', title: 'Days', type: 'number', initialValue: 0},
+        {name: 'hours', title: 'Hours', type: 'number', initialValue: 0},
+        {name: 'minutes', title: 'Minutes', type: 'number', initialValue: 15},
+        {name: 'seconds', title: 'Seconds', type: 'number', initialValue: 0},
+      ]
     }),
     defineField({
       name: 'rating',
