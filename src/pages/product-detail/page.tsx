@@ -331,12 +331,14 @@ export default function ProductDetailPage() {
               {/* Left Side: Product Image & Pricing (Sticky on Desktop) */}
               <div className="lg:col-span-5 space-y-6 md:space-y-8 lg:sticky lg:top-24">
                 <div className="bg-gray-900 rounded-3xl lg:rounded-[2rem] p-4 md:p-8 border border-white/5 shadow-2xl overflow-hidden relative group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-50"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent opacity-50"></div>
+                  <div className="absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px] group-hover:bg-emerald-500/30 transition-colors duration-700"></div>
+                  
                   {product.imageUrl ? (
                     <img 
                       src={product.imageUrl} 
                       alt={product.title} 
-                      className="w-full h-auto rounded-2xl shadow-lg relative z-10 transform group-hover:scale-[1.02] transition-transform duration-500"
+                      className="w-full h-auto rounded-2xl shadow-2xl relative z-10 transform group-hover:scale-[1.03] transition-transform duration-700 brightness-[1.1] contrast-[1.05] drop-shadow-[0_0_30px_rgba(16,185,129,0.2)]"
                     />
                   ) : (
                     <div className="aspect-[4/5] bg-gray-800 rounded-2xl flex items-center justify-center relative z-10">
@@ -358,60 +360,67 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Pricing Card */}
-                <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl lg:rounded-[2.5rem] p-5 sm:p-10 shadow-2xl relative overflow-hidden group/card">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px] -z-0"></div>
-                  
-                  <div className="relative z-10 space-y-8">
-                    <div className="space-y-2">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
-                        {timeLeft > 0 && (
-                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-[10px] font-black uppercase tracking-widest animate-pulse">
-                            <Clock size={12} />
-                            Ends in: {formatTime(timeLeft)}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-4xl sm:text-5xl font-black text-white">₹{product.offerPrice}</span>
-                        {product.actualPrice > product.offerPrice && (
-                          <span className="text-lg sm:text-xl text-gray-600 font-medium line-through decoration-emerald-500/50 decoration-2">₹{product.actualPrice}</span>
-                        )}
+                <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl lg:rounded-[2.5rem] shadow-2xl relative overflow-hidden group/card">
+                  {/* Countdown Banner */}
+                  {timeLeft > 0 && (
+                    <div className="bg-gradient-to-r from-orange-600 to-red-600 py-3 px-4 text-center border-b border-white/10 relative z-20">
+                      <div className="flex items-center justify-center gap-3">
+                        <Clock size={16} className="text-white animate-pulse" />
+                        <p className="text-white text-sm font-black uppercase tracking-tighter">
+                          Limited Time Launch Offer: <span className="text-yellow-300 ml-1">{formatTime(timeLeft)}</span> left
+                        </p>
                       </div>
                     </div>
+                  )}
 
-                    <div className="space-y-4">
-                      <button 
-                        onClick={handlePurchase}
-                        disabled={isPurchasing}
-                        className="w-full py-5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl rounded-2xl transition-all active:scale-[0.98] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center justify-center gap-3 disabled:opacity-70 group"
-                      >
-                        {isPurchasing ? (
-                          <>
-                            <Loader2 className="w-6 h-6 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          <>
-                            {product.ctaText || (product.offerPrice === 0 ? 'Yes! I Want Instant Access (Free)' : 'Yes! I Want Full Access Now')} 
-                            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-                          </>
-                        )}
-                      </button>
-                      
-                      <p className="text-center text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-2 flex items-center justify-center gap-2">
-                        <Lock size={12} className="text-emerald-500" /> 256-bit Secure Checkout
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-3 pt-4 border-t border-white/5">
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <ShieldCheck size={18} className="text-emerald-500" />
-                        Verified Digital Access
+                  <div className="p-5 sm:p-10 relative">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-[60px] -z-0"></div>
+                    
+                    <div className="relative z-10 space-y-8">
+                      <div className="space-y-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Special Launch Price</p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-4xl sm:text-5xl font-black text-white">₹{product.offerPrice}</span>
+                          {product.actualPrice > product.offerPrice && (
+                            <span className="text-lg sm:text-xl text-gray-600 font-medium line-through decoration-emerald-500/50 decoration-2">₹{product.actualPrice}</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-300">
-                        <Clock size={18} className="text-blue-500" />
-                        Lifetime Updates Included
+
+                      <div className="space-y-4">
+                        <button 
+                          onClick={handlePurchase}
+                          disabled={isPurchasing}
+                          className="w-full py-5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl rounded-2xl transition-all active:scale-[0.98] shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center justify-center gap-3 disabled:opacity-70 group"
+                        >
+                          {isPurchasing ? (
+                            <>
+                              <Loader2 className="w-6 h-6 animate-spin" />
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              Get Instant Access for ₹{product.offerPrice} →
+                            </>
+                          )}
+                        </button>
+                        
+                        <p className="text-center text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-2 flex items-center justify-center gap-2">
+                          <Lock size={12} className="text-emerald-500" /> 256-bit Secure Checkout
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-3 pt-4 border-t border-white/5">
+                        <div className="flex items-center gap-3 text-sm text-gray-300">
+                          <ShieldCheck size={18} className="text-emerald-500" />
+                          Verified Digital Access
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-gray-300">
+                          <Clock size={18} className="text-blue-500" />
+                          Lifetime Updates Included
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -706,7 +715,7 @@ export default function ProductDetailPage() {
           disabled={isPurchasing}
           className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : (product.offerPrice === 0 ? 'Yes! Download Free' : `Yes! I Want Access • ₹${product.offerPrice}`)}
+          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : `Get Instant Access for ₹${product.offerPrice} →`}
         </button>
       </div>
 

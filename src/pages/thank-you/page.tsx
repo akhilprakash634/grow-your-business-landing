@@ -213,6 +213,22 @@ export default function ThankYouPage() {
             </div>
 
             <div className="space-y-4">
+              <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-2xl p-6 text-left space-y-4">
+                <h4 className="font-bold text-emerald-400 flex items-center gap-2">
+                  <Unlock className="w-4 h-4" /> Usage Instructions
+                </h4>
+                <div className="space-y-3 text-sm text-gray-400">
+                  <p className="flex gap-3">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-[10px] font-bold text-emerald-500">1</span>
+                    <span>Create a Notion account at <a href="https://www.notion.so/" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">notion.so</a> if you don't have one.</span>
+                  </p>
+                  <p className="flex gap-3">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-[10px] font-bold text-emerald-500">2</span>
+                    <span>Open the link below and click <strong>"Duplicate"</strong> at the top right to add it to your Notion workspace.</span>
+                  </p>
+                </div>
+              </div>
+
               {productData?.downloadLink ? (
                 <a
                   href={productData.downloadLink}
@@ -220,11 +236,15 @@ export default function ThankYouPage() {
                   rel="noopener noreferrer"
                   className="w-full bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
                 >
-                  <Download className="w-6 h-6" /> DOWNLOAD PDF NOW
+                  {productData.downloadLink.includes('notion') ? (
+                    <><ArrowRight className="w-6 h-6" /> ACCESS NOTION SYSTEM NOW</>
+                  ) : (
+                    <><Download className="w-6 h-6" /> DOWNLOAD PDF NOW</>
+                  )}
                 </a>
               ) : (
                 <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
-                  Download link not found. Please contact support below.
+                  Access link not found. Please contact support below.
                 </div>
               )}
               
