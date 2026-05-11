@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Users, ArrowRight } from 'lucide-react';
+import { gtag } from '../utils/analytics';
 
 // Using simple SVG icons since Lucide doesn't have WhatsApp/Telegram brand icons
 const WhatsAppIcon = () => (
@@ -68,6 +69,7 @@ export default function SocialPopup() {
               href="https://chat.whatsapp.com/Hnv1hJpBYZcA7LvUPnBV6D"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => gtag('event', 'generate_lead', { method: 'whatsapp_community' })}
               className="flex items-center justify-between group/btn p-3 bg-emerald-50 hover:bg-emerald-100 rounded-2xl transition-colors"
             >
               <div className="flex items-center gap-3">
@@ -83,6 +85,7 @@ export default function SocialPopup() {
               href="https://t.me/+nU7ZzIXV_dkyNTJl"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => gtag('event', 'generate_lead', { method: 'telegram_community' })}
               className="flex items-center justify-between group/btn p-3 bg-blue-50 hover:bg-blue-100 rounded-2xl transition-colors"
             >
               <div className="flex items-center gap-3">

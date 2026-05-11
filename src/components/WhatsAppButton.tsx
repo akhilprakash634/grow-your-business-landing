@@ -1,4 +1,5 @@
 import { MessageCircle } from 'lucide-react';
+import { gtag } from '../utils/analytics';
 
 export default function WhatsAppButton() {
   const phoneNumber = "916282863459"; // Used from Hero.tsx
@@ -9,6 +10,7 @@ export default function WhatsAppButton() {
       href={`https://wa.me/${phoneNumber}?text=${message}`}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => gtag('event', 'generate_lead', { method: 'whatsapp_direct' })}
       className="fixed bottom-6 right-6 z-[100] flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_8px_40px_rgba(37,211,102,0.6)] transition-all duration-300 group"
       aria-label="Chat with us on WhatsApp"
     >
