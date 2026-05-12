@@ -17,8 +17,8 @@ export default function Footer() {
       { name: 'Local SEO / GMB', path: '/services' },
     ],
     legal: [
-      { name: 'Privacy Policy', path: '#' },
-      { name: 'Terms of Service', path: '#' },
+      { name: 'Privacy Policy', path: '/privacy-policy' },
+      { name: 'Terms and Conditions', path: '/terms-and-conditions' },
     ]
   };
 
@@ -108,9 +108,9 @@ export default function Footer() {
           </p>
           <div className="flex space-x-6">
             {footerLinks.legal.map((link) => (
-              <a key={link.name} href={link.path} className="text-gray-500 hover:text-white text-xs transition-colors">
+              <Link key={link.name} to={link.path} className="text-gray-500 hover:text-white text-xs transition-colors">
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
