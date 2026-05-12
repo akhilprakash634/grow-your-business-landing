@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Menu, X, MessageCircle } from 'lucide-react';
 
 export default function Header() {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -47,29 +48,30 @@ export default function Header() {
         isScrolled ? 'bg-gray-950/95 backdrop-blur-md shadow-lg border-b border-gray-800' : 'bg-transparent'
       }`}
     >
-      <nav 
+      <nav
         className={`w-full px-4 sm:px-6 lg:px-8 transition-all duration-300 ${
           isScrolled ? 'py-2' : 'py-3 sm:py-4'
-        }`} 
+        }`}
         aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="group flex items-center space-x-3" aria-label="Grow Your Business - Home">
-            <img 
-              src="/logo.png" 
-              alt="Grow Your Business Logo" 
+            <img
+              src="/logo.png"
+              alt="Grow Your Business Logo"
               width="160"
               height="50"
               className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
                 isScrolled ? 'h-8 sm:h-10' : 'h-10 sm:h-12'
-              }`} 
+              }`}
               loading="eager"
+              fetchPriority="high"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-8" aria-label="Site links">
             {navLinks.map((link) => (
               link.path.startsWith('/#') ? (
                 <button
@@ -95,34 +97,37 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div className="hidden lg:flex items-center">
             <a
               href="https://wa.me/916282863459"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Free consultation on WhatsApp"
               className={`px-5 py-2 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] flex items-center space-x-2 ${
                 isScrolled ? 'scale-90' : 'scale-100'
               }`}
             >
-              <i className="ri-whatsapp-fill text-lg"></i>
+              <MessageCircle size={16} aria-hidden="true" />
               <span>{t('nav.free_consultation')}</span>
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="lg:hidden p-2 rounded-lg text-gray-200 hover:text-white hover:bg-gray-800 transition-colors"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
           >
-            <i className={`${isMobileMenuOpen ? 'ri-close-line' : 'ri-menu-line'} text-2xl`}></i>
+            {isMobileMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 right-0 bg-gray-950 border-b border-gray-800 py-4 px-4 shadow-xl">
-            <nav className="flex flex-col space-y-2">
+            <nav className="flex flex-col space-y-2" aria-label="Mobile site links">
               {navLinks.map((link) => (
                 link.path.startsWith('/#') ? (
                   <button
@@ -149,9 +154,10 @@ export default function Header() {
                 href="https://wa.me/916282863459"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Free consultation on WhatsApp"
                 className="w-full px-5 py-3.5 bg-emerald-500 text-white text-center text-sm font-bold rounded-lg hover:bg-emerald-600 transition-all flex items-center justify-center space-x-2"
               >
-                <i className="ri-whatsapp-fill text-lg"></i>
+                <MessageCircle size={16} aria-hidden="true" />
                 <span>{t('nav.free_consultation')}</span>
               </a>
             </div>

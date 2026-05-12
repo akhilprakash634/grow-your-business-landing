@@ -167,5 +167,40 @@ export const product = defineType({
       initialValue: false,
       description: 'If enabled, this product will be hidden from the store and cannot be purchased.'
     }),
+    defineField({
+      name: 'authorName',
+      title: 'Author Name',
+      type: 'string',
+      description: 'Name of the creator of this product.'
+    }),
+    defineField({
+      name: 'authorBio',
+      title: 'Author Bio',
+      type: 'text',
+      description: 'Short professional bio of the author.'
+    }),
+    defineField({
+      name: 'authorImage',
+      title: 'Author Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'authorSocials',
+      title: 'Author Social Links',
+      type: 'array',
+      of: [
+        {
+          name: 'socialLink',
+          type: 'object',
+          fields: [
+            { name: 'platform', type: 'string', title: 'Platform (e.g. Instagram, Twitter, LinkedIn)' },
+            { name: 'url', type: 'url', title: 'URL' },
+          ],
+        },
+      ],
+    }),
   ],
 })
