@@ -34,6 +34,8 @@ export default function Footer() {
                 alt="Grow Your Business Logo" 
                 width="180" 
                 height="60" 
+                loading="lazy"
+                decoding="async"
                 className="h-16 w-auto object-contain" 
               />
             </Link>

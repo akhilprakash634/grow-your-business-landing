@@ -1,13 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { gtag } from '../../utils/analytics';
-import { client } from '../../lib/sanity';
+import { client, optimisedImageUrl, getImageSrcSet } from '../../lib/sanity';
 import { initiateCheckout } from '../../utils/razorpay';
 import Header from '../home/components/Header';
 import Footer from '../home/components/Footer';
-import CheckoutModal from './CheckoutModal';
+
+const CheckoutModal = lazy(() => import('./CheckoutModal'));
+const FAQSection = lazy(() => import('./components/FAQSection'));
+const ReviewsSection = lazy(() => import('./components/ReviewsSection'));
+const Lightbox = lazy(() => import('./components/Lightbox'));
 import { useSEO, generateProductSchema, generateBreadcrumbSchema } from '../../utils/seo';
-import { ChevronLeft, ChevronRight, Download, ShieldCheck, Zap, ArrowRight, Loader2, Star, CheckCircle2, Clock, Users, Lock, X, Images, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, ShieldCheck, Zap, Loader2, Star, CheckCircle2, Clock, Users, Lock, X, Images, Plus, Instagram, Twitter, Linkedin, Youtube, Github, Globe } from 'lucide-react';
 
 interface FAQ {
   question: string;
@@ -39,6 +43,10 @@ interface Product {
     seconds?: number;
   };
   previewUrls?: string[];
+  authorName?: string;
+  authorBio?: string;
+  authorImageUrl?: string;
+  authorSocials?: { platform: string; url: string }[];
 }
 
 interface Review {
@@ -49,6 +57,16 @@ interface Review {
   profession?: string;
   createdAt: string;
 }
+
+const getSocialIcon = (platform: string) => {
+  const p = platform.toLowerCase();
+  if (p.includes('instagram')) return Instagram;
+  if (p.includes('twitter') || p.includes('x')) return Twitter;
+  if (p.includes('linkedin')) return Linkedin;
+  if (p.includes('youtube')) return Youtube;
+  if (p.includes('github')) return Github;
+  return Globe;
+};
 
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -126,12 +144,13 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     const handleScroll = () => {
       setShowSticky(window.scrollY > 400);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // passive: true — never blocks scrolling, reduces jank
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -190,6 +209,10 @@ export default function ProductDetailPage() {
             ctaText,
             countdown,
             "previewUrls": previewImages[].asset->url,
+            authorName,
+            authorBio,
+            "authorImageUrl": authorImage.asset->url,
+            authorSocials,
             "reviews": *[_type == "review" && product._ref == ^._id && approved == true] | order(createdAt desc) {
               _id,
               name,
@@ -435,9 +458,18 @@ export default function ProductDetailPage() {
               <div className="bg-gray-900 rounded-3xl lg:rounded-[2rem] p-4 md:p-8 border border-white/5 shadow-2xl overflow-hidden relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent opacity-50"></div>
                 {product.imageUrl ? (
-                  <img 
-                    src={product.imageUrl} 
-                    alt={product.title} 
+                  // LCP element: fetchpriority=high + explicit dims prevent CLS
+                  // WebP/resize via Sanity CDN params saves ~2000KB
+                  <img
+                    src={optimisedImageUrl(product.imageUrl, { w: 800, q: 85 })}
+                    srcSet={getImageSrcSet(product.imageUrl, [400, 600, 800, 1200])}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    alt={product.title}
+                    width={600}
+                    height={750}
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
                     className="w-full h-auto rounded-2xl shadow-2xl relative z-10 transform group-hover:scale-[1.03] transition-transform duration-700 brightness-[1.1] contrast-[1.05] drop-shadow-[0_0_30px_rgba(16,185,129,0.2)]"
                   />
                 ) : (
@@ -460,15 +492,20 @@ export default function ProductDetailPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {product.previewUrls.slice(0, 4).map((url, i) => (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         onClick={() => openLightbox(i)}
                         className="aspect-video bg-gray-900 rounded-xl overflow-hidden border border-white/5 cursor-zoom-in group/preview relative shadow-lg"
                       >
-                        <img 
-                          src={url} 
-                          alt={`Preview ${i + 1}`} 
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                        {/* lazy load below-fold thumbs; WebP at 300px saves ~80% size */}
+                        <img
+                          src={optimisedImageUrl(url, { w: 300, h: 200, q: 70 })}
+                          alt={`Inside preview screenshot ${i + 1} of ${product.title}`}
+                          width={300}
+                          height={200}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Plus size={18} className="text-white/60 scale-75 group-hover:scale-100 transition-transform" />
@@ -516,12 +553,13 @@ export default function ProductDetailPage() {
                       )}
                     </div>
 
-                    <button 
+                    <button
                       onClick={handlePurchase}
                       disabled={isPurchasing}
+                      aria-label={`Get access to ${product.title} for ₹${product.offerPrice}`}
                       className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg rounded-2xl transition-all active:scale-[0.98] shadow-xl flex items-center justify-center gap-2 disabled:opacity-70 group"
                     >
-                      {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : `Get Access Now →`}
+                      {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : `Get Access Now →`}
                     </button>
                     
                     <div className="flex flex-col gap-2">
@@ -647,160 +685,95 @@ export default function ProductDetailPage() {
                 </div>
               )}
 
-              {/* FAQ Section */}
-              {product.faqs && product.faqs.length > 0 && (
-                <div className="space-y-10 px-4">
-                  <h3 className="text-3xl font-black text-white tracking-tight">Frequently Asked Questions</h3>
-                  <div className="grid gap-6">
-                    {product.faqs.map((faq, i) => (
-                      <div key={i} className="bg-white/[0.03] border border-white/5 rounded-3xl p-8 space-y-4 hover:bg-white/[0.05] transition-colors">
-                        <h4 className="font-bold text-white text-xl">Q: {faq.question}</h4>
-                        <p className="text-gray-400 leading-relaxed text-base font-medium">{faq.answer}</p>
+              {/* Author Section */}
+              {product.authorName && (
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 space-y-6 relative overflow-hidden group">
+                  <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+                    {/* Author Image */}
+                    <div className="shrink-0">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gray-800 overflow-hidden border border-white/10 shadow-xl">
+                        {product.authorImageUrl ? (
+                          <img 
+                            src={optimisedImageUrl(product.authorImageUrl, { w: 200, h: 200, q: 80 })}
+                            alt={product.authorName} 
+                            width={96}
+                            height={96}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-700">
+                            <Users size={32} />
+                          </div>
+                        )}
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Author Details */}
+                    <div className="flex-1 space-y-4 text-center sm:text-left">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Creator</span>
+                        <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{product.authorName}</h3>
+                      </div>
+                      
+                      {product.authorBio && (
+                        <p className="text-gray-400 text-sm sm:text-base leading-relaxed font-medium">
+                          {product.authorBio}
+                        </p>
+                      )}
+
+                      {/* Social Links */}
+                      {product.authorSocials && product.authorSocials.length > 0 && (
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                          {product.authorSocials.map((social, i) => {
+                            const Icon = getSocialIcon(social.platform);
+                            return (
+                              <a 
+                                key={i}
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-white/10 transition-all"
+                                title={social.platform}
+                              >
+                                <Icon size={16} />
+                              </a>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
+
+              {/* FAQ Section */}
+              <Suspense fallback={<div className="h-20 animate-pulse bg-white/5 rounded-3xl" />}>
+                <FAQSection faqs={product.faqs || []} />
+              </Suspense>
             </div>
           </div>
 
           {/* Full Width Reviews Section */}
-          <div className="pt-20 border-t border-white/5 space-y-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <div className="space-y-6">
-                <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">Customer Reviews</h3>
-                <div className="flex items-center gap-8">
-                  <div className="flex items-center gap-3 text-3xl font-black text-white">
-                    <Star className="text-yellow-500 fill-yellow-500" size={32} /> 4.9/5
-                  </div>
-                  <div className="h-8 w-px bg-white/10 hidden sm:block"></div>
-                  <div className="text-gray-400 font-bold text-lg">Based on 500+ happy buyers</div>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => setShowReviewForm(!showReviewForm)}
-                className="inline-flex items-center gap-3 px-8 py-5 bg-white text-black font-black rounded-2xl hover:bg-emerald-500 hover:text-white transition-all active:scale-95 shadow-2xl"
-              >
-                <Star size={20} className={showReviewForm ? 'fill-current' : ''} />
-                {showReviewForm ? 'Close Review Form' : 'Write a Review'}
-              </button>
-            </div>
-
-            {/* Review Form */}
-            <div className={`overflow-hidden transition-all duration-700 ease-in-out ${showReviewForm ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-              <form onSubmit={handleSubmitReview} className="bg-gray-900 border border-white/10 rounded-[3rem] p-8 sm:p-12 space-y-10 shadow-3xl">
-                <h4 className="text-3xl font-black text-white tracking-tight">Share Your Experience</h4>
-                
-                {reviewStatus && (
-                  <div className={`p-6 rounded-2xl text-base font-bold ${reviewStatus.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                    {reviewStatus.message}
-                  </div>
-                )}
-
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Public Name</label>
-                    <input 
-                      required
-                      value={reviewName}
-                      onChange={(e) => setReviewName(e.target.value)}
-                      placeholder="e.g. John D."
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-700 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all text-lg font-bold"
-                    />
-                  </div>
-                  <div className="space-y-4">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Profession/Role</label>
-                    <input 
-                      value={reviewProfession}
-                      onChange={(e) => setReviewProfession(e.target.value)}
-                      placeholder="e.g. Digital Marketer"
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-700 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all text-lg font-bold"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Star Rating</label>
-                  <div className="flex items-center gap-4 bg-black/40 border border-white/10 rounded-2xl px-8 py-4 w-fit">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => setReviewRating(star)}
-                        className="transition-transform hover:scale-125 active:scale-90"
-                      >
-                        <Star 
-                          size={40} 
-                          className={`${star <= reviewRating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-800'}`} 
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Your Review</label>
-                  <textarea 
-                    required
-                    value={reviewComment}
-                    onChange={(e) => setReviewComment(e.target.value)}
-                    placeholder="What did you like most about this product?"
-                    rows={4}
-                    className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder:text-gray-700 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all resize-none text-lg font-medium"
-                  />
-                </div>
-
-                <button 
-                  disabled={isSubmittingReview}
-                  className="w-full md:w-auto px-12 py-5 bg-emerald-500 text-white font-black rounded-2xl hover:bg-emerald-600 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(16,185,129,0.3)] text-xl"
-                >
-                  {isSubmittingReview ? <Loader2 className="animate-spin" /> : 'Publish My Review'}
-                </button>
-              </form>
-            </div>
-
-            {/* Reviews List */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reviews.length > 0 ? (
-                reviews.map((review) => (
-                  <div key={review._id} className="bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-8 space-y-6 hover:bg-white/[0.05] transition-all group">
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 flex items-center justify-center text-emerald-400 font-black text-xl shadow-inner">
-                          {review.name[0]}
-                        </div>
-                        <div>
-                          <h5 className="font-bold text-white text-lg">{review.name}</h5>
-                          {review.profession && (
-                            <p className="text-emerald-500 text-[10px] font-bold uppercase tracking-wider">{review.profession}</p>
-                          )}
-                          <div className="flex items-center gap-1 mt-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} size={14} className={`${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-800'}`} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-[10px] font-bold text-gray-600 uppercase tracking-widest bg-white/5 px-2 py-1 rounded">
-                        {new Date(review.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
-                      </div>
-                    </div>
-                    <p className="text-gray-400 leading-relaxed font-medium text-base italic group-hover:text-gray-300 transition-colors">
-                      "{review.comment}"
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <div className="lg:col-span-3 text-center py-20 bg-white/[0.02] border border-white/5 border-dashed rounded-[3rem]">
-                  <div className="inline-flex w-16 h-16 rounded-full bg-white/5 items-center justify-center mb-6">
-                    <Star size={32} className="text-gray-700" />
-                  </div>
-                  <p className="text-2xl text-gray-600 font-black italic">No reviews yet. Be the first to share!</p>
-                </div>
-              )}
-            </div>
-          </div>
+          <Suspense fallback={<div className="h-40 animate-pulse bg-white/5 rounded-[3rem]" />}>
+            <ReviewsSection
+              reviews={reviews}
+              showReviewForm={showReviewForm}
+              setShowReviewForm={setShowReviewForm}
+              handleSubmitReview={handleSubmitReview}
+              reviewStatus={reviewStatus}
+              reviewName={reviewName}
+              setReviewName={setReviewName}
+              reviewProfession={reviewProfession}
+              setReviewProfession={setReviewProfession}
+              reviewRating={reviewRating}
+              setReviewRating={setReviewRating}
+              reviewComment={reviewComment}
+              setReviewComment={setReviewComment}
+              isSubmittingReview={isSubmittingReview}
+            />
+          </Suspense>
         </div>
       </main>
 
@@ -809,88 +782,37 @@ export default function ProductDetailPage() {
         <button
           onClick={handlePurchase}
           disabled={isPurchasing}
+          aria-label={`Get instant access to ${product.title} for ₹${product.offerPrice}`}
           className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : `Get Instant Access for ₹${product.offerPrice} →`}
+          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : `Get Instant Access for ₹${product.offerPrice} →`}
         </button>
       </div>
 
       <Footer />
 
-      <CheckoutModal
-        isOpen={isCheckoutModalOpen}
-        onClose={() => setIsCheckoutModalOpen(false)}
-        onConfirm={handleConfirmCheckout}
-        productName={product.title}
-        price={product.offerPrice}
-      />
+      <Suspense fallback={null}>
+        <CheckoutModal
+          isOpen={isCheckoutModalOpen}
+          onClose={() => setIsCheckoutModalOpen(false)}
+          onConfirm={handleConfirmCheckout}
+          productName={product.title}
+          price={product.offerPrice}
+        />
+      </Suspense>
 
       {/* Lightbox */}
-      {lightboxOpen && product.previewUrls && product.previewUrls.length > 0 && (
-        <div
-          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
-          onClick={closeLightbox}
-        >
-          <button
-            onClick={closeLightbox}
-            className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all z-10 hover:rotate-90"
-          >
-            <X size={24} />
-          </button>
-
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 text-white font-black text-sm bg-white/10 px-6 py-2 rounded-full backdrop-blur-md">
-            {lightboxIndex + 1} / {product.previewUrls.length}
-          </div>
-
-          {product.previewUrls.length > 1 && (
-            <button
-              onClick={(e) => { e.stopPropagation(); prevImage(); }}
-              className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all z-10 active:scale-90"
-            >
-              <ChevronLeft size={32} />
-            </button>
-          )}
-
-          <div
-            className="max-w-5xl max-h-[85vh] w-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              key={lightboxIndex}
-              src={product.previewUrls[lightboxIndex]}
-              alt={`Preview ${lightboxIndex + 1}`}
-              className="max-h-[80vh] max-w-full object-contain rounded-2xl shadow-3xl animate-in zoom-in duration-300"
-            />
-          </div>
-
-          {product.previewUrls.length > 1 && (
-            <button
-              onClick={(e) => { e.stopPropagation(); nextImage(); }}
-              className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all z-10 active:scale-90"
-            >
-              <ChevronRight size={32} />
-            </button>
-          )}
-
-          {product.previewUrls.length > 1 && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 overflow-x-auto max-w-[90vw] px-4 py-2 bg-white/5 rounded-2xl backdrop-blur-md">
-              {product.previewUrls.map((url, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => { e.stopPropagation(); setLightboxIndex(i); }}
-                  className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
-                    i === lightboxIndex
-                      ? 'border-emerald-500 opacity-100 scale-110 shadow-lg'
-                      : 'border-white/10 opacity-40 hover:opacity-100'
-                  }`}
-                >
-                  <img src={url} alt={`Thumb ${i + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <Suspense fallback={null}>
+        <Lightbox
+          isOpen={lightboxOpen}
+          onClose={closeLightbox}
+          index={lightboxIndex}
+          setIndex={setLightboxIndex}
+          urls={product.previewUrls || []}
+          prevImage={prevImage}
+          nextImage={nextImage}
+        />
+      </Suspense>
     </div>
   );
 }
