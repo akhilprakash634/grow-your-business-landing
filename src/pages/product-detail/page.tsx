@@ -805,7 +805,7 @@ export default function ProductDetailPage() {
       </main>
 
       {/* Sticky Mobile Purchase Button */}
-      <div className={`lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gray-950/80 backdrop-blur-xl border-t border-white/10 z-[60] transition-transform duration-300 ${showSticky ? 'translate-y-0 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]' : 'translate-y-full'}`}>
+      <div className={`lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gray-950/80 backdrop-blur-xl border-t border-white/10 z-[110] transition-transform duration-300 ${showSticky && !isCheckoutModalOpen ? 'translate-y-0 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]' : 'translate-y-full'}`}>
         <button
           onClick={handlePurchase}
           disabled={isPurchasing}

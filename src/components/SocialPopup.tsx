@@ -47,10 +47,10 @@ export default function SocialPopup() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-4 pointer-events-none">
+    <div className="fixed bottom-28 md:bottom-8 left-6 md:left-8 z-[100] flex flex-col items-start gap-4 pointer-events-none">
       {/* Expanded Menu */}
       <div
-        className={`bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-slate-100 p-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right pointer-events-auto ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
+        className={`bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-slate-100 p-4 w-72 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-left pointer-events-auto ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-10 pointer-events-none'
           }`}
       >
         <div className="space-y-4">
@@ -102,17 +102,6 @@ export default function SocialPopup() {
 
       {/* Floating Trigger Button */}
       <div className="flex items-center gap-3 pointer-events-auto">
-        <div className={`bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 transition-all duration-500 ${isOpen ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'
-          }`}>
-          <p className="text-xs font-black text-slate-800 flex items-center gap-2">
-            <span className="flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            {/* Join Our Community */}
-          </p>
-        </div>
-
         <button
           onClick={toggleOpen}
           className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 active:scale-90 ${isOpen
@@ -122,6 +111,17 @@ export default function SocialPopup() {
         >
           {isOpen ? <X size={24} strokeWidth={3} /> : <Users size={24} strokeWidth={2.5} />}
         </button>
+
+        <div className={`bg-white px-4 py-2 rounded-2xl shadow-xl border border-slate-100 transition-all duration-500 ${isOpen ? 'opacity-0 translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'
+          }`}>
+          <p className="text-xs font-black text-slate-800 flex items-center gap-2">
+            <span className="flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Join Our Community
+          </p>
+        </div>
       </div>
     </div>
   );
