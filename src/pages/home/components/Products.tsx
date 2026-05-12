@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, Layout, ArrowRight } from 'lucide-react';
-import { fetchProducts } from '../../../lib/sanity';
+import { fetchProducts, optimisedImageUrl } from '../../../lib/sanity';
 
 interface SanityProduct {
   _id: string;
@@ -107,7 +107,15 @@ export default function Products() {
               <div className="flex flex-col md:flex-row gap-6 items-center">
                 <div className="w-full md:w-32 lg:w-40 aspect-square bg-emerald-500/10 rounded-xl overflow-hidden flex-shrink-0 group-hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)] transition-all">
                   {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.title} className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
+                    <img 
+                      src={optimisedImageUrl(product.imageUrl, { w: 400, h: 400 })} 
+                      alt={product.title} 
+                      className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
+                      width="400"
+                      height="400"
+                      decoding="async"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-emerald-400">
                       <Layout className="w-8 h-8" />

@@ -500,6 +500,8 @@ export default function ProductDetailPage() {
                         {/* lazy load below-fold thumbs; WebP at 300px saves ~80% size */}
                         <img
                           src={optimisedImageUrl(url, { w: 300, h: 200, q: 70 })}
+                          srcSet={getImageSrcSet(url, [300, 600])}
+                          sizes="(max-width: 640px) 50vw, 300px"
                           alt={`Inside preview screenshot ${i + 1} of ${product.title}`}
                           width={300}
                           height={200}
@@ -695,6 +697,8 @@ export default function ProductDetailPage() {
                         {product.authorImageUrl ? (
                           <img 
                             src={optimisedImageUrl(product.authorImageUrl, { w: 200, h: 200, q: 80 })}
+                            srcSet={getImageSrcSet(product.authorImageUrl, [100, 200, 400])}
+                            sizes="96px"
                             alt={product.authorName} 
                             width={96}
                             height={96}

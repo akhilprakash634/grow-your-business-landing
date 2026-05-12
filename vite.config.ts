@@ -89,8 +89,8 @@ export default defineConfig({
           if (id.includes("@stripe")) return "vendor-stripe";
           // Sanity client — keep in its own chunk (used on product pages)
           if (id.includes("@sanity") || id.includes("groq")) return "vendor-sanity";
-          // React ecosystem — always needed, cache separately
-          if (id.includes("react-dom") || id.includes("react-router")) return "vendor-react";
+          // React ecosystem & i18n — always needed, cache separately
+          if (id.includes("react-dom") || id.includes("react-router") || id.includes("i18next")) return "vendor-react";
           // Lucide icons — tree-shakeable but split for caching
           if (id.includes("lucide-react")) return "vendor-lucide";
         },
