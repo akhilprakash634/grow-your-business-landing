@@ -8,6 +8,7 @@ interface Review {
   name: string;
   rating: number;
   comment: string;
+  profession?: string;
   approved: boolean;
   createdAt: string;
   productTitle: string;
@@ -124,6 +125,11 @@ export default function AdminReviewsPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="font-bold text-slate-900 text-lg">{review.name}</h3>
+                          {review.profession && (
+                            <span className="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                              {review.profession}
+                            </span>
+                          )}
                           {!review.approved && (
                             <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                               Pending Approval

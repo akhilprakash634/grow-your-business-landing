@@ -370,7 +370,7 @@ app.post('/api/request-support', (req, res) => {
 
 app.post('/api/submit-review', async (req, res) => {
   try {
-    const { name, rating, comment, productId } = req.body;
+    const { name, rating, comment, productId, profession } = req.body;
     
     if (!name || !rating || !comment || !productId) {
       return res.status(400).json({ error: 'Missing required fields: name, rating, comment, and productId are all required.' });
@@ -381,6 +381,7 @@ app.post('/api/submit-review', async (req, res) => {
       name,
       rating: parseInt(rating),
       comment,
+      profession,
       product: {
         _type: 'reference',
         _ref: productId,
@@ -407,6 +408,7 @@ app.get('/api/admin/reviews', async (req, res) => {
       name,
       rating,
       comment,
+      profession,
       approved,
       createdAt,
       "productTitle": product->title

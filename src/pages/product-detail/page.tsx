@@ -46,6 +46,7 @@ interface Review {
   name: string;
   rating: number;
   comment: string;
+  profession?: string;
   createdAt: string;
 }
 
@@ -65,6 +66,7 @@ export default function ProductDetailPage() {
   
   // Review Form State
   const [reviewName, setReviewName] = useState('');
+  const [reviewProfession, setReviewProfession] = useState('');
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -187,7 +189,15 @@ export default function ProductDetailPage() {
             faqs,
             ctaText,
             countdown,
-            "previewUrls": previewImages[].asset->url
+            "previewUrls": previewImages[].asset->url,
+            "reviews": *[_type == "review" && product._ref == ^._id && approved == true] | order(createdAt desc) {
+              _id,
+              name,
+              rating,
+              comment,
+              profession,
+              createdAt
+            }
           }`,
           { slug }
         );
@@ -207,12 +217,9 @@ export default function ProductDetailPage() {
             }]
           });
 
-          // Fetch approved reviews for this product
-          const reviewsData = await client.fetch(
-            `*[_type == "review" && product._ref == $productId && approved == true] | order(createdAt desc)`,
-            { productId: productData._id }
-          );
-          setReviews(reviewsData);
+          if (productData.reviews) {
+            setReviews(productData.reviews);
+          }
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -303,6 +310,7 @@ export default function ProductDetailPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: reviewName,
+          profession: reviewProfession,
           rating: reviewRating,
           comment: reviewComment,
           productId: product._id
@@ -314,6 +322,7 @@ export default function ProductDetailPage() {
       if (response.ok) {
         setReviewStatus({ type: 'success', message: data.message });
         setReviewName('');
+        setReviewProfession('');
         setReviewComment('');
         setReviewRating(5);
         // Hide form after success
@@ -662,6 +671,15 @@ export default function ProductDetailPage() {
                     />
                   </div>
                   <div className="space-y-3">
+                    <label className="text-xs font-black text-gray-500 uppercase tracking-[0.2em]">Profession/Role</label>
+                    <input 
+                      value={reviewProfession}
+                      onChange={(e) => setReviewProfession(e.target.value)}
+                      placeholder="e.g. Entrepreneur, Digital Marketer"
+                      className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-gray-700 focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all text-lg"
+                    />
+                  </div>
+                  <div className="space-y-3">
                     <label className="text-xs font-black text-gray-500 uppercase tracking-[0.2em]">Star Rating</label>
                     <div className="flex items-center gap-3 bg-black/40 border border-white/10 rounded-2xl px-6 py-3 h-[60px]">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -716,6 +734,9 @@ export default function ProductDetailPage() {
                         </div>
                         <div>
                           <h5 className="font-bold text-white text-lg">{review.name}</h5>
+                          {review.profession && (
+                            <p className="text-emerald-500/80 text-xs font-bold uppercase tracking-wider mb-1">{review.profession}</p>
+                          )}
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star key={i} size={14} className={`${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-800'}`} />
