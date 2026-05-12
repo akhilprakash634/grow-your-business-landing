@@ -1,13 +1,19 @@
+import { lazy, Suspense } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Problem from './components/Problem';
-import Services from './components/Services';
-import Pricing from './components/Pricing';
-import SocialProof from './components/SocialProof';
-import HowItWorks from './components/HowItWorks';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import { useSEO, generateLocalBusinessSchema, generateServiceSchema, generateOrganizationSchema } from '../../utils/seo';
+
+// Lazy load non-critical components
+const Problem = lazy(() => import('./components/Problem'));
+const Services = lazy(() => import('./components/Services'));
+const Pricing = lazy(() => import('./components/Pricing'));
+const SocialProof = lazy(() => import('./components/SocialProof'));
+const HowItWorks = lazy(() => import('./components/HowItWorks'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
+
+// Minimal loading placeholder for smooth transitions
+const ComponentLoader = () => <div className="py-20 bg-gray-950 animate-pulse" />;
 
 export default function Home() {
   const schemas = [
@@ -31,14 +37,18 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <Problem />
-        <Services />
-        <Pricing />
-        <SocialProof />
-        <HowItWorks />
-        <Contact />
+        <Suspense fallback={<ComponentLoader />}>
+          <Problem />
+          <Services />
+          <Pricing />
+          <SocialProof />
+          <HowItWorks />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={<div className="h-40 bg-gray-950" />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }
