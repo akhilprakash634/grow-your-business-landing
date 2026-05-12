@@ -26,6 +26,12 @@ export const review = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'profession',
+      title: 'Profession/Role',
+      type: 'string',
+      description: 'e.g. Entrepreneur, Digital Marketer, Student',
+    }),
+    defineField({
       name: 'product',
       title: 'Product',
       type: 'reference',
@@ -51,12 +57,13 @@ export const review = defineType({
       title: 'name',
       subtitle: 'comment',
       rating: 'rating',
+      profession: 'profession',
     },
     prepare(selection) {
-      const { title, subtitle, rating } = selection;
+      const { title, subtitle, rating, profession } = selection;
       return {
         title: `${title} (${rating} stars)`,
-        subtitle: subtitle,
+        subtitle: profession ? `${profession} - ${subtitle}` : subtitle,
       };
     },
   },
