@@ -154,6 +154,20 @@ export default function ProductDetailPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Hide chat bubble when modal is open so it doesn't cover the Proceed button
+    const chatWidget =
+      document.querySelector<HTMLElement>('#crisp-chatbox') ||
+      document.querySelector<HTMLElement>('.tidio-1') ||
+      document.querySelector<HTMLElement>('[data-id="zsalesiq"]') ||
+      document.querySelector<HTMLElement>('.chat-widget') ||
+      document.getElementById('chat-widget-container');
+
+    if (chatWidget) {
+      chatWidget.style.display = isCheckoutModalOpen ? 'none' : '';
+    }
+  }, [isCheckoutModalOpen]);
+
   const openLightbox = useCallback((index: number) => {
     setLightboxIndex(index);
     setLightboxOpen(true);
@@ -390,18 +404,20 @@ export default function ProductDetailPage() {
       
       {/* 1. Trust Bar (Sticky below the fixed header) */}
       <div className="bg-gray-950 border-b border-white/5 py-2 mt-16 sm:mt-20 sticky top-16 sm:top-20 z-40 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-center md:justify-between gap-6 md:gap-0 text-gray-400 text-[10px] sm:text-xs font-medium">
-          <div className="flex items-center gap-2">
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-center gap-4 sm:gap-6 md:justify-between text-gray-400 text-[10px] sm:text-xs font-medium overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1.5 shrink-0">
             <Star size={12} className="text-yellow-500 fill-yellow-500" />
             <span>4.9/5 from 500+ buyers</span>
           </div>
-          <div className="flex items-center gap-2">
+          <span className="text-white/10 shrink-0">|</span>
+          <div className="flex items-center gap-1.5 shrink-0">
             <ShieldCheck size={12} className="text-emerald-500" />
-            <span>Instant access after payment</span>
+            <span>Instant access</span>
           </div>
-          <div className="hidden md:flex items-center gap-2">
+          <span className="text-white/10 shrink-0">|</span>
+          <div className="flex items-center gap-1.5 shrink-0">
             <Clock size={12} className="text-emerald-500" />
-            <span>Lifetime updates included</span>
+            <span>Lifetime updates</span>
           </div>
         </div>
       </div>
@@ -568,7 +584,28 @@ export default function ProductDetailPage() {
                       <p className="text-center text-[10px] text-gray-500 uppercase font-bold tracking-widest flex items-center justify-center gap-2">
                         <Lock size={12} className="text-emerald-500" /> 256-bit Secure Checkout
                       </p>
-                      <p className="text-center text-[10px] text-gray-500 font-medium mt-1">
+
+                      {/* Payment method logos */}
+                      <div className="flex items-center justify-center gap-2 py-1">
+                        {/* Razorpay wordmark */}
+                        <img
+                          src="https://razorpay.com/assets/razorpay-glyph.svg"
+                          alt="Razorpay"
+                          width={18}
+                          height={18}
+                          loading="lazy"
+                          className="opacity-40 hover:opacity-70 transition-opacity"
+                        />
+                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-wider">Razorpay</span>
+                        <span className="text-white/10">·</span>
+                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-wider">UPI</span>
+                        <span className="text-white/10">·</span>
+                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-wider">Cards</span>
+                        <span className="text-white/10">·</span>
+                        <span className="text-[9px] text-gray-600 font-bold uppercase tracking-wider">Net Banking</span>
+                      </div>
+
+                      <p className="text-center text-[10px] text-gray-500 font-medium">
                         Questions? Email us — we'll make it right.
                       </p>
                     </div>
@@ -602,7 +639,7 @@ export default function ProductDetailPage() {
                           </div>
                         </div>
                         <p className="text-gray-500 text-[11px] italic leading-relaxed">
-                          "{review.comment.length > 80 ? review.comment.substring(0, 80) + "..." : review.comment}"
+                          "{review.comment.length > 140 ? review.comment.substring(0, 140) + "..." : review.comment}"
                         </p>
                       </div>
                     ))}
@@ -781,16 +818,54 @@ export default function ProductDetailPage() {
         </div>
       </main>
 
-      {/* Sticky Mobile Purchase Button */}
-      <div className={`lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-gray-950/80 backdrop-blur-xl border-t border-white/10 z-[110] transition-transform duration-300 ${showSticky && !isCheckoutModalOpen ? 'translate-y-0 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]' : 'translate-y-full'}`}>
-        <button
-          onClick={handlePurchase}
-          disabled={isPurchasing}
-          aria-label={`Get instant access to ${product.title} for ₹${product.offerPrice}`}
-          className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
-        >
-          {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : `Get Instant Access for ₹${product.offerPrice} →`}
-        </button>
+      {/* Sticky Purchase Bar — Mobile & Desktop */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-[110] transition-transform duration-300
+          ${showSticky && !isCheckoutModalOpen ? 'translate-y-0' : 'translate-y-full'}`}
+      >
+        {/* Mobile bar (full width green button) */}
+        <div className="lg:hidden p-4 bg-gray-950/90 backdrop-blur-xl border-t border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+          <button
+            onClick={handlePurchase}
+            disabled={isPurchasing}
+            aria-label={`Get instant access to ${product.title} for ₹${product.offerPrice}`}
+            className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-lg shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
+          >
+            {isPurchasing
+              ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              : `Get Instant Access for ₹${product.offerPrice} →`}
+          </button>
+        </div>
+
+        {/* Desktop bar (slim, right-aligned) */}
+        <div className="hidden lg:flex items-center justify-between px-8 py-3 bg-gray-950/95 backdrop-blur-xl border-t border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
+          <div className="flex items-center gap-6 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <Star size={11} className="text-yellow-500 fill-yellow-500" /> 4.9/5 from 500+ buyers
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck size={11} className="text-emerald-500" /> Secure checkout
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock size={11} className="text-emerald-500" /> Instant access
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-[10px] text-gray-600 line-through">₹{product.actualPrice}</p>
+              <p className="text-white font-black text-sm">₹{product.offerPrice}</p>
+            </div>
+            <button
+              onClick={handlePurchase}
+              disabled={isPurchasing}
+              className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm rounded-xl transition-all active:scale-[0.98] shadow-[0_4px_20px_rgba(16,185,129,0.3)] flex items-center gap-2 disabled:opacity-70"
+            >
+              {isPurchasing
+                ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                : `Get Access — ₹${product.offerPrice} →`}
+            </button>
+          </div>
+        </div>
       </div>
 
       <Footer />
