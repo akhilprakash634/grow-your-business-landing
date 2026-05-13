@@ -52,8 +52,10 @@ export default function CheckoutModal({ isOpen, onClose, onConfirm, productName,
         <div className="relative z-10 p-8 sm:p-10 space-y-8">
           <div className="flex justify-between items-start">
             <div className="space-y-1">
-              <h3 id="modal-title" className="text-2xl font-black text-white">Complete Your Order</h3>
-              <p className="text-gray-400 text-sm">Where should we send your access link?</p>
+              <h3 id="modal-title" className="text-2xl font-black text-white">Almost there — one step to access</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Enter your email below — we'll send your Notion access link here instantly after payment.
+              </p>
             </div>
             <button 
               onClick={onClose}
@@ -113,6 +115,10 @@ export default function CheckoutModal({ isOpen, onClose, onConfirm, productName,
             </div>
 
             {error && <p className="text-red-400 text-sm ml-1" role="alert">{error}</p>}
+
+            <p className="text-[11px] text-gray-500 text-center leading-relaxed">
+              🔒 Secure payment via Razorpay · No account needed · Instant delivery
+            </p>
 
             <div className="space-y-4">
               <button
